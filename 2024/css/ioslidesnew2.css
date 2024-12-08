@@ -1,0 +1,16 @@
+.css-tricks > hgroup {
+  background-color: rgb(26, 148, 186);
+  margin-top: -40px;
+  padding-top: 40px;
+  margin-left: -60px;
+  padding-left: 60px;
+  margin-right: -60px;
+  padding-right: 60px;
+}
+
+slide {
+    background-position: center;
+    background-repeat: no-repeat;
+    #background-size: contain;
+    background-size: 100%;
+}

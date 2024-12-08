@@ -1,0 +1,274 @@
+---
+title: "The Box Model"
+subtitle: "Sampling Data | Chance Variability"
+author: "© University of Sydney MATH1005"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+output:
+  ioslides_presentation:
+    css:
+    - css/ioslidesnew.css
+    - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: true
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+---
+<style>
+.title-slide {
+  background-image: url("http://www.maths.usyd.edu.au/u/UG/JM/DATA1001/r/current/figure/casino.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+</style>
+
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+require(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+require(knitr)
+popsd = function(x) sqrt(mean((x-mean(x))^2))
+```
+
+
+```{r child='Module3.Rmd'}
+```
+
+
+
+
+
+# The Box model
+
+
+## Statistical models
+- A **model** is a representation of something which 
+  - is **simpler** but at the same time
+  - captures the **key features** of the original.
+  
+- Data obtained "in real life" is generated (in general) by quite complicated processes.
+
+- **Statistical models** are models for data-generating processes:
+  - they are much simpler than the "real" data-generating process but
+  - (hopefully) they capture the key features, at least in terms of the **random variability** of the data.
+
+## The box model
+- The **box model** is a very simple statistical model for *numerical* data.
+- A collection of $N$ objects, e.g. tickets, balls is imagined "in a box".
+- Each object bears a number.
+- A **random sample** of a certain number of the objects is taken.
+- The sampling may be **with** or **without** replacement.
+
+## Random samples
+- What does "a random sample is taken" mean exactly?
+- It means that: 
+
+
+<div class="thinkingbox"> 
+A sample of the appropriate size is taken in such a way that
+ **each possible sample** is equally likely.
+</div>
+
+## Single observations (samples of size $n=1$)
+
+- If a single draw is taken, then each object in the "box" has an equal chance of being picked.
+- If we *completely know* the contents of the box, we can write down the chance of each possible value.
+
+
+## Simple Examples
+- For example, suppose we have the following (simple) box:
+  \[\fbox{ $\fbox{1}\ \fbox{2}\ \fbox{3}$ }\]
+- There are then three possible values: $\fbox{1}$, $\fbox{2}$ and $\fbox{3}$ and each has (equal) chance of $\frac13$ of being picked:
+  \[ P(\text{drawing $\fbox{1}$}) =
+   P(\text{drawing $\fbox{2}$}) =
+   P(\text{drawing $\fbox{3}$}) = \frac13\,.\]
+  Here we write $P(\cdot)$ to denote the "probability" or "chance" of each event.
+  
+## Non-equal chances
+- We can have box models where the different possible *values* are not necessarily equally likely.
+- For the box 
+  \[\fbox{ $\fbox{1}\ \fbox{2}\ \fbox{2}\  \fbox{3}\ \fbox{3}\ \fbox{3}$ }\]
+  if each "ticket" is equally likely,  we have
+  \[ P(\text{drawing $\fbox{1}$}) = \frac16\,,\]
+  \[ P(\text{drawing $\fbox{2}$}) = \frac26 = \frac13\,,\]
+  \[  P(\text{drawing $\fbox{3}$}) = \frac36 = \frac12\,.\]
+
+## Larger box example
+Consider the box defined by the file `y.dat` in the R code below:
+```{r}
+y = scan("y.dat")
+y
+```
+What is the chance that a single draw from this is less than 8?
+
+## Find the *proportion* less than 8
+```{r}
+table(y)
+sum(table(y))
+```
+
+```{r}
+length(y)
+sum(y<8)
+```
+
+## _
+```{r}
+sum(y<8)/length(y)
+mean(y<8)
+```
+The chance of drawing a value less than 8 is $\frac{35}{216}\approx 16\%$. 
+
+## More complicated examples: summaries of boxes
+- For box models with a large number of "tickets" we may not know the "exact" composition of the box.
+- We may have a *summary* of the list of numbers on the tickets, e.g. histogram.
+  - We can then provide *approximations* to the chances of certain events.
+  
+## Histogram example
+Suppose we only had access to the following histogram of `y`, and wanted to approximate the chance of 
+drawing a number less than 8:
+```{r}
+hist(y, pr=T)
+```
+
+## Area of rectangles
+- The *area* of each rectangle gives the proportion/percentage of values in that range.
+- The heights of the rectangles (from the left) are (approx.) 0.009, 0.037, 0.083. 
+- Since the bases are 2 units wide, the (approx.) area of the first 3 rectangles is
+  $$0.018 + 0.074 + 0.166 \approx 26\%$$
+- This is an overestimate because the rectangle includes the right endpoint of each interval in R by default. 
+- It actually gives a better estimate of the chance of a draw being $\leq 8$, so compare this to
+```{r}
+mean(y<=8)
+```
+
+  
+
+## Normal approximation to histograms and chances
+- Suppose  that for a  box model with a large number of tickets,  the histogram of the list of numbers is "bell-shaped".
+- Then all we need to approximate
+  - certain areas under the histogram boxes and thus
+  - certain chances/probabilities
+  
+  is the mean $\mu$  and SD  $\sigma$ of the list of numbers in the box.
+  
+## Normal approximation example 
+- Suppose we are told that the mean and SD of `y` are `10.5` and `2.96` (resp.), and that it is "bell-shaped". 
+- How now to approximate the chance of a draw less than 8?
+- In standard units, 8 corresponds to
+```{r}
+(8-10.5)/2.96
+```
+- The tail area below this point on the standard normal curve is
+```{r}
+pnorm(-.8446)
+```
+ 
+
+## New interpretation of mean and SD of box
+- When we are taking a random numerical draw from a box, we shall see that the mean and SD of the box
+have a new, special interpretation.
+- We call the mean $\mu$ of the box the **expected value (EV)** of the draw.
+- We call the SD $\sigma$ of the box the **standard error (SE)** of the random draw.
+
+## Random draw =  Expected value + Chance error
+- The random draw may be "decomposed" into two pieces:
+$$\text{Random draw} = \text{EV} + \text{(Random draw $-$ EV)} = \text{EV} + \text{Chance error}\,.$$
+- The first part EV is *not random*. 
+  - All randomness is included in the chance error, which is itself a random draw from an **error box** (a box with mean zero).
+- **Example**: a random draw from  $$\fbox{ $\fbox{1}\ \fbox{2}\ \fbox{3}$ }$$
+  may instead be thought of as 
+  $$2 + \text{ Random draw from the error box }
+  \fbox{ $\fbox{$-1$}\ \fbox{0}\ \fbox{+1}$ }$$
+
+## Standard error
+- The **standard error** is the "root-mean-square" of the error box.
+  - Measures the "size" of the errors in some sense.
+- It is a measure of "random variation".
+- For two different random draws, one with the larger SE is likely to differ from its
+  EV by a larger amount.
+  
+## Samples of size $n\geq 2$: Example
+- Consider our earlier example with the box
+  $$\fbox{ $\fbox{1}\ \ \fbox{2}\ \  \fbox{3}$  }$$
+  and that we wish to take a random sample of size $n=2$.
+- This means *each possible sample of size 2 is equally likely*.
+- We can list all possible samples (there are $9 = 3^2$ of them):
+$$
+\left(\fbox{1}, \fbox{1}\right), 
+\left(\fbox{1}, \fbox{2}\right), 
+\left(\fbox{1}, \fbox{3}\right),$$ 
+$$ \left(\fbox{2}, \fbox{1}\right), 
+\left(\fbox{2}, \fbox{2}\right), 
+\left(\fbox{2}, \fbox{3}\right),$$ 
+$$\left(\fbox{3}, \fbox{1}\right), 
+\left(\fbox{3}, \fbox{2}\right), 
+\left(\fbox{3}, \fbox{3}\right).$$ 
+
+## Statistic of interest: sample sum
+- When we take a sample of size $n\geq 2$, we are often interested in a single numerical characteristic (a "statistic") of the sample.
+- We shall discuss what happens when we are interested in the **sample sum**.
+- Note that each *equally likely* sample has a corresponding sum.
+- Thus the two-step process of
+
+  1. taking a sample and then
+  2. computing the sum
+  
+  may be thought of as equivalent to taking a **single draw from a "bigger" box** (the box of sums of all possible samples)
+
+## Table of all possible samples and their sums
+
+Sample | Sum
+-------|-----
+ (1,1) | 2 
+ (1,2) | 3  
+ (1,3) | 4 
+ (2,1) | 3 
+ (2,2) | 4  
+ (2,3) | 5 
+ (3,1) | 4 
+ (3,2) | 5  
+ (3,3) | 6 
+
+## Equivalent single-draw (bigger) box
+Thus, the two-step process of:
+
+1. taking a random sample of size $n=2$ from the box
+   \[\fbox{ $\fbox{1}\ \fbox{2}\ \fbox{3}$ }\]
+2. getting the sum
+  
+is equivalent to taking a **single random draw** from the box
+  \[\fbox{ $\fbox{2}\ \fbox{3}\ \fbox{3}\ \fbox{4}\ \fbox{4}\ \fbox{4}\ \fbox{5}\ \fbox{5}\ \fbox{6} $ }\]
+  
+## EV and SE of the sum
+In our last example, note that
+- the original box (the "population")
+  \[\fbox{ $\fbox{1}\ \fbox{2}\ \fbox{3}$ }\]
+  has mean $\mu=2$, mean square $(1+4+9)/3 = 14/3$ and thus SD
+  $$ \sigma = \sqrt{ \frac{14}3 - 2^2}= \sqrt{\frac{14 - 12}3} = \sqrt{\frac23}\,.$$
+
+(Recall the useful computing formula SD = $\sqrt{\text{ mean square} - (\text{average})^2       }$)
+
+## Box of all possible sums: mean and SD
+The box of all possible sums though, has mean
+$$ \frac{2 + 3 + 3+ 4+4+4+5+5+6}9 = \frac{36}9= 4 = 2\mu\,,$$
+mean square 
+$$ \frac{4+9+9+16+16+16+25+25+36}9 = \frac{156}9$$
+and thus SD
+$$ \sqrt{\frac{156}9 - 4^2} = \sqrt{\frac{156 - (9\times 16)}9} = \sqrt{\frac{156 - 144}9} 
+=\sqrt{\frac 43} = \frac 2{\sqrt 3} = \sqrt 2 \sigma\,.$$
+
+
+## General result for sums
+
+This is a special case  of an important special result.
+
+<div class="thinkingbox"> 
+- Suppose a random sample of size $n$ is taken *with replacement* from a box with mean $\mu$ and SD $\sigma$. 
+- Then the sample sum has expected value $n \mu$ and standard error $\sqrt n \sigma$.
+</div>
+
+This follows because 
+
+- the bigger box of sums of all possible samples has mean $n\mu$ and SD $\sqrt n \sigma$;
+- taking a sample and computing the sum is equivalent to a single random draw from this bigger box.
+
+## Live demonstration (time permitting)

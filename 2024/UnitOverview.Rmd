@@ -1,0 +1,37 @@
+## Course Overview
+
+```{r, out.width = '85%', echo=F, warning = F}
+library("DiagrammeR")
+
+DiagrammeR::grViz(" 
+digraph rmarkdown {
+
+graph [fontsize = 16, fontname = Arial, nodesep = .1, ranksep = .8]
+node [fontsize = 16, fontname = Arial, fontcolor = White]
+edge [fontsize = 12, fontname = Arial, width = 2]
+
+Population [shape=box,style=filled, color=SteelBlue4,width=2.5]
+
+Sample [shape=oval, style=filled, color=SteelBlue3, label='Sample']
+
+EmptyBox1 [style=filled, color=White, fontname = 'Arial', fontcolor = Black, fontsize=12, label='1 Exploring Data']
+
+EmptyBox2 [style=filled, color=White,fontname = Arial, fontcolor = Black, fontsize=12,label='2 Modelling Data']
+{rank = same; Sample; EmptyBox1; EmptyBox2}
+
+Population -> Sample [label = '  3 Sampling Data    ']
+
+Sample -> Population [label='  4 Decisions with Data']
+
+Sample -> EmptyBox2 [style='invisible', arrowhead=none, arrowtail = none, colour= White]
+
+EmptyBox2 -> Sample [arrowtail = none, style='invisible', arrowhead=none, colour=White]
+
+EmptyBox1 -> Sample [arrowtail = none, style='invisible', arrowhead=none, colour=White]
+
+EmptyBox1 -> Sample [arrowtail = none, style='invisible', arrowhead=none, colour=White]
+
+}
+")
+detach(package:DiagrammeR)
+```

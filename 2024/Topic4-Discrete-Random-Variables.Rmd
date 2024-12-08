@@ -1,0 +1,162 @@
+---
+title: "Probability"
+subtitle: "Probability and Data Modelling | Understanding Probability"
+author: "© University of Sydney MATH1062"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+output:
+  ioslides_presentation:
+    css:
+      - css/ioslidesnew.css
+      - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: true
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+    
+---
+<style>
+.column-left{
+  float: left;
+  width: 49%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 49%;
+  text-align: right;
+}
+body {
+text-align: justify}
+</style>
+
+
+<style>
+.title-slide {
+  background-image: url("https://raw.githubusercontent.com/tcui001/tcui001.github.io/master/assets/img/casino.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+</style>
+
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+library(knitr)
+```
+
+```{r child='Module2.Rmd'}
+```
+
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-map-marker fa-stack-1x fa-inverse"></i></span>Outline
+
+<div class="thinkingbox"> 
+### [Definitions](#6)
+### [Multiplication and Addition Rule](#10)  
+### [The prosecutor's fallacy](#15)  
+### [Some Exercises](#27)  
+### [Summary](#31)  
+</div>
+
+
+## Random variables
+
+
+<div class="thinkingbox">
+
+<div style="margin-top: -15px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Definition (random variable)
+
+<div style="margin-top: 10px"></div>
+
+A random variable is a real valued function on a sample space $\Omega$, that captures both the outcomes and associated probabilities.
+
+<div style="margin-top: -30px"></div>
+
+</div>
+
+<div style="margin-top: 15px"></div>
+
+- This definition is a formal way of saying “random variables” is just a way of assigning probabilities to events in the sample space.
+- A random variable is a simple way of summarising a probability problem. It sharpens our focus by summarising the outcomes and highlighting the events of interest.
+- We use a capital Roman letter $X$ to denote a random variable and the corresponding lower case letter $x$ to denote the values of the random variable.
+
+<div style="margin-top: -10px"></div>
+
+We will consider discrete and continuous random variables, depending on the underlying context.
+
+## Counting short cuts
+
+Computing classical probabilities amounts to careful counting, so we have the following short-cuts.
+
+- Multiplication principle for $k$ stage problems
+
+- permutations and factorials
+
+- combinations and binomial coefficients
+
+## Distribution
+
+A **distribution** defines the behaviour of a situation modelled by a variable $X$, in particular
+
+- the set of all possible values $\{x\}$ 
+
+    - "what can happen"
+
+- the probability of each value (discrete) or each range of values (continuous) occuring.
+    
+    - "how often everything happens"
+
+- think about the histogram on the density scale.
+
+## Probability functions
+
+<div style="margin-top: 10px"></div>
+
+For a variable $X$, we can describe the probabilities by:
+
+- The **probability mass function** (or probability distribution function) (for discrete variables):
+\[P(X=x)\]
+
+- The **probability density function (pdf)** (for continuous variables)
+\[f(x)\]
+
+- The **cumulative distribution function (CDF)** (for both discrete and continuous variables)
+\[F(x) = P(X \leq x)\]
+
+## Types of distributions
+
+We can characterise distributions in 2 ways:
+
+By **context**:
+
+- population distribution: it describes how individuals in a population are distributed across different values or categories of a particular variable.
+- sample distribution: it describes the distribution of one sample of size $n$ of a population.
+- sampling distribution (for a statistic like the sample mean $\bar{X}$).
+
+By **underlying nature**:
+
+- discrete distribution
+- continuous distributions
+
+
+## Summary
+
+
+**Addition Rule**
+
+- Two events are mutually exclusive when the occurrence of one event prevents the other.
+- If two events are mutually exclusive then the chance of **at least one event** occuring is the **sum** of the individual chances.
+
+**Multiplication Rule**
+
+- two events are independent if	the ocurrence of the first event does not change the chance of the second event.
+- If two events are independent then the chance of **both** events occuring is the **multiplication** of the individual chances.
+
+### Key Words
+probability, chance, complement,  conditional probability, multiplication rule, addition Rule, independence, dependence, mutually exclusive, prosecutor's fallacy.
+
+
+
+
+

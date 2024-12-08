@@ -1,0 +1,11 @@
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-chart-bar fa-stack-1x fa-inverse"></i></span> Module1 Exploring Data 
+
+<div class="thinkingbox"> 
+
+### Data & Graphical Summaries 
+What type of data do we have & how can we visualise it?
+
+### Numerical Summaries 
+What are the main features of the data?
+
+</div>

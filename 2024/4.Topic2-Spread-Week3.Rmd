@@ -1,0 +1,540 @@
+---
+title: "Spread"
+subtitle: "Exploring Data | Numerical Summaries"
+author: "© University of Sydney MATH1062"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+output:
+  ioslides_presentation:
+    css:
+    - css/ioslidesnew.css
+    - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: true
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+---
+<style>
+.title-slide {
+  background-image: url("https://raw.githubusercontent.com/tcui001/tcui001.github.io/master/assets/img/home1.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+</style>
+
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+library(knitr)
+```
+
+
+```{r child='UnitOverview.Rmd'}
+```
+
+```{r child='Module1.Rmd'}
+```
+
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-map-marker-alt fa-stack-1x fa-inverse"></i></span> Spread
+
+<div class="thinkingbox"> 
+### [Data Story | How much does a property in Newtown cost?](#6)
+### [Standard deviation](#11)
+### [Standard Units](#24) 
+### [interquartile range (IQR)](#28)
+### [Summary](#34)
+</div>
+
+# Data Story | How much does a property in Newtown cost?
+
+## 
+<div align="center">
+<img src="figure/newtownhouse.jpg" width="60%" height="60%">
+</div>
+
+## Data on Newtown Property Sales 
+
+Data from [domain.com.au](domain.com.au) for Newtown (NSW 2042) between April-June 2017.
+
+<br>
+```{r}
+data <- read.csv("data/NewtownJune2017.csv",header=T)
+head(data, n=2)
+```
+
+##
+```{r}
+dim(data)
+str(data)
+mean(data$Sold)
+```
+
+##
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> Statistical Thinking
+
+
+```{r, echo=F}
+meanmillions = round(mean(data$Sold)/1000,digits=3)
+medianillions = round(median(data$Sold)/1000,digits=3)
+
+```
+
+We now know that the sample mean price of Newtown properties is `r meanmillions` million and the sample median is `r medianillions` million. 
+
+- In what ways is this information useful?
+- In what ways is this information limited in usefulness? 
+</div>
+
+# Standard deviation
+
+## How to measure spread? 
+
+For each property sold, we could calculate the **gap** between the house and the sample mean $1407 (thousands).
+
+|Property|Sold|Gap|Conclusion|
+|---|---|---|---|
+|19 Watkin Street|$1950 (thousands)|1950-1407=543|More than half a  million dollars more expensive than the average house price|
+|30 Pearl St|$1250 (thousands)|1250-1407=-157|Cheaper than the average house price|
+
+##
+
+```{r}
+gaps = data$Sold - mean(data$Sold)
+gaps
+max(gaps)
+```
+
+<span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> What are the biggest and smallest gaps?
+
+How do we **summarise** all the gaps into **1 number** ("spread")?
+
+## 1st attempt: The mean gap 
+
+We could calculate the **average** of the gaps.
+
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Mean gap
+$$
+\mbox{mean gap} = \mbox{sample mean(data - sample mean(data))}
+$$
+</div>
+
+<br>
+
+```{r}
+round(mean(gaps))
+```
+
+<span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> What's the problem?
+
+##
+
+Note: It will always be 0!
+
+- From the definition, the mean gap must be 0, as the mean is the **balancing point** of the gaps.
+
+- For those who like algebra, the mean gap is 
+$\frac{ \sum_{i=1}^{n} (x_{i} - \bar{x})}{n} = \frac{ \sum_{i=1}^{n} x_{i}}{n} - \frac{n \bar{x}}{n} = 0$.
+
+## Better option: Standard deviation
+
+<br>
+First define the Root Mean Square (RMS). 
+
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Root Mean Square
+
+- The RMS measures the **average** of a set of numbers, regardless of the signs.
+- The steps are: *Square* the numbers, then *Mean* the result, then *Root* the result. 
+$$ \mbox{RMS(numbers)} = \sqrt{\mbox{sample mean}\left(\mbox{numbers}^2\right)}$$
+- So effectively, the *Square* and *Root* operations "reverse" each other.
+
+</div>
+
+
+##
+
+- Applying RMS to the gaps, we get
+$$ \mbox{RMS of gaps} = \sqrt{\mbox{sample mean}\left(\mbox{gaps}^2\right)}=\sqrt{\frac{\sum_{i=1}^{n}(\mbox{gap}_i)^2}{n}}$$
+
+- To avoid the cancellation of the gaps, another possible method is to consider the average of the absolute values of the gaps: $\frac{\sum_{i=1}^{n}|\mbox{gap}_i|}{n}$.
+However, this is harder algebraically.
+
+
+<!--
+- The RMS measures the **average** of the data, regardless of the signs.
+- The steps are: *Square* the data, then *Mean* the result, then *Root* the result.
+$$
+\mbox{RMS} = \sqrt{\mbox{Mean of squared data}}
+\approx \mbox{Mean of absolute data}
+$$
+- Formally, $\mbox{RMS} = \sqrt{\frac{\sum_{i=1}^{n}x_i^2}{n}} \approx \frac{\sum_{i=1}^{n}|x_i|}{n}$
+</div>
+
+##
+
+```{r}
+# RMS
+sqrt(mean(data$Sold^2))
+# RMS approximation
+mean(abs(data$Sold))
+```
+
+-->
+
+
+## Standard deviation in terms of RMS
+
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Population Standard deviation
+
+- The standard deviation measures the **spread** of the data.
+
+$$ \mbox{SD}_{pop} = \mbox{RMS of (gaps from the mean)}$$
+
+- Formally, $\mbox{SD}_{pop} = \sqrt{\mbox{Mean of (gaps from the mean)}^{2}} = \sqrt{\frac{\sum_{i=1}^{n}(x_i - \overline{x})^2}{n}}$
+
+</div>
+
+<br>
+
+```{r}
+sqrt(mean(gaps^2))
+```
+
+<!--
+## 
+
+<div class="thinkingbox"> 
+
+An equivalent calculation is:
+$$
+\mbox{s} = \sqrt{ \mbox{Mean of squared data} - \mbox{Mean of data}^2 }
+$$
+or
+$$ s = \sqrt{ \frac{ \sum_{i=1}^{n} x_{i}^2 }{n} - \bar{x}^2 } $$
+</div>
+
+<br>
+
+```{r}
+sqrt(mean(data$Sold^2)-mean(data$Sold)^2)
+```
+-->
+
+## Standard deviation in R?
+
+It is easy to calculate in R.
+
+```{r}
+sd(data$Sold)
+```
+
+<span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> But why is this slightly different?
+
+## Adjusting the standard deviation
+
+- There are **2** different formulas for the standard deviation, depending on whether the data is the **population** or a **sample**.
+- The `sd` command in R always gives the **sample** version, as we most commonly have samples.
+- Formally, $\mbox{SD}_{pop} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (gaps_i)^2}$ and $\mbox{SD}_{sample} = \sqrt{ \frac{1}{n-1} \sum_{i=1}^{n} (gaps_i)^2}$.
+
+```{r,message=F, warning=F}
+sd(data$Sold)*sqrt(55/56)   # adjust by sqrt((n-1)/n), it calculates the population SD.
+#library(devtools)
+#install_github("cran/multicon")  ## install multicon package 
+library(multicon)  
+popsd(data$Sold)  # Quickest way!
+```
+
+## Overall Summary: population vs sample
+
+|Summary|Formula|In R|
+|-------|--------|-----|-----|
+|**Population** or **Sample** mean| Sample Mean (Average)|`mean(data)`|
+|**Population** standard deviation $\mbox{SD}_{pop}$|RMS of gaps from the sample mean |`popsd(data)`|
+|**Sample** standard deviation $\mbox{SD}_{sample}$|Adjusted RMS of gaps from the sample mean <br> |`sd(data)`|
+
+<br>
+
+- The squared standard deviation is called the **variance**: $\mbox{SD}^2$.
+- `popsd(data)` requires the `multicon` package.
+- The population standard deviation is always smaller than a sample standard deviation, \(\mbox{SD}_{pop} \leq \mbox{SD}_{sample}\), why? Extra variability due to sampling.  
+
+
+## Large samples?
+
+```{r}
+# population SD
+popsd(data$Sold)
+
+# sample SD
+sd(data$Sold)
+```
+
+Note for large sample sizes, the difference becomes negligible. 
+
+## How to tell the difference?
+
+- It can be tricky to work out whether your data is a population or sample!
+- Look at the information about the data story and the research questions.
+    - If we are just interested in the Newtown property prices during April-June 2017, then the `data` is the whole **population**.
+     - If we are studying the property prices during April-June 2017 as a window into more general property prices (for the rest of the year or for the Inner West area) , then the `data` could be considered a **sample**.
+     - More of this interesting topic in 2nd and 3rd year courses!
+- For simplicity, let's now assume the Newtown data is a **sample** for the following work.
+
+```{r}
+sd=sd(data$Sold)
+sd
+```
+    
+
+<!--
+## Overall Summary: Population vs sample
+
+|Type of data|Formula|In R|
+|-------|--------|-----|-----|
+|**Population** mean|Average $\mu =\frac{1}{n} \sum_{i=1}^{n} x_{i}$|`mean(data)`|
+|**Sample** mean|Average $\overline(x) =\frac{1}{n} \sum_{i=1}^{n} x_{i}$|`mean(data)`|
+|**Population** standard deviation|RMS of gaps from the mean $\sigma = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (gaps)^2}$|`sd(data)*sqrt((n-1)/n))`|
+|**Sample** standard deviation|Adjusted RMS of gaps from the mean <br> $\mbox{s} = \sqrt{ \frac{1}{n-1} \sum_{i=1}^{n} (gaps)^2}$|`sd(data)`|
+
+<br>
+
+Note: The squared standard deviation is called the **variance**: $\sigma^2$ or $s^2$.
+-->
+
+# Standard Units
+
+## Standard deviation on the histogram
+
+```{r, echo=F}
+sd = round(sd(data$Sold),digits=1)
+```
+
+```{r, fig.height=3}
+hist(data$Sold, main="Newtown properties", xlab="Price (in 1000s)")
+abline(v=mean(data$Sold),col="green")
+abline(v=mean(data$Sold)-sd,col="blue")
+abline(v=mean(data$Sold)+sd,col="blue")
+abline(v=mean(data$Sold)-2*sd,col="purple")
+abline(v=mean(data$Sold)+2*sd,col="purple")
+abline(v=mean(data$Sold)-3*sd,col="brown")
+abline(v=mean(data$Sold)+3*sd,col="brown")
+```
+
+
+## Standard units
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Standard units ("Z score")
+
+Standard units of a data point = how many standard deviations is it below or above the mean
+
+$$ \mbox{Standard units} = \frac{\mbox{data point - mean}}{\mbox{SD}} $$
+
+This means that
+$$ \mbox{ data point = mean + SD} \times \mbox{standard units}$$
+</div>
+
+## Comparing 2 data points
+
+To compare 2 data points, we can compare the standard units.
+
+|Property|Sold|Standard units|Conclusion|
+|---|---|---|---|
+|19 Watkin Street|\$1950 (thousands)|$\frac{1950-1407}{599}=0.91$|Almost 1 SD higher than the average house price|
+|30 Pearl St|\$1250 (thousands)|$\frac{1250-1407}{599}=-0.26$|0.26 SDs cheaper than the average house price|
+
+<br>
+
+So 19 Watkin is a more unusual purchase than 30 Pearl St, relative to the mean.
+
+# Interquartile Range
+## Interquartile range (IQR) 
+
+The IQR is another measure of spread by the **ordering**
+
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-book fa-stack-1x fa-inverse"></i></span> Interquartile Range (IQR)
+
+$$
+\mbox{IQR} = \mbox{Range of the middle 50% of the data}
+$$
+
+<br>
+
+- More formally,  $\mbox{IQR}= Q_{3} - Q_{1}$, where
+    - $Q_{1}$ is the 25% percentile (1st quartile) and $Q_{3}$ is the 75% percentile (3rd quartile).
+    - The median is the 50% percentile, or 2nd quartile $\tilde{x} =  Q_{2}$.
+</div>
+
+##  Quantile, quartile, percentile
+
+The set of **$q$-quantiles** divides the data into $q$ equal size sets (in terms of percentage of data).
+
+<i class="fa fa-book fa-stack-1x fa-inverse"></i> **Percentile** is 100-quantile.
+
+The set of **quartiles** divides the data into four quarters.
+
+```{r}
+summary(data$Sold)
+IQR(data$Sold)
+```
+
+So the range of the middle 50% of properties sold is almost a million dollars!
+
+
+## IQR on the boxplot 
+
+```{r, echo=F}
+medianmillions = round(median(data$Sold)/1000,digits=1)
+```
+
+- The IQR is the length of the box in the boxplot. It represents the span of the middle 50% of the houses sold.
+
+- The **lower** and **upper thresholds** are a distance of 1.5IQR from the 1st and 3rd quartiles (by convention).
+
+$$ LT = Q_{1} - 1.5IQR $$ and $$ UT = Q_{3} + 1.5IQR $$
+
+- Data outside these thresholds is considered an **outlier** ("extreme reading").
+
+##
+
+```{r, fig.height=4}
+boxplot(data$Sold)
+iqr=quantile(data$Sold)[4] - quantile(data$Sold)[2]
+abline(h=median(data$Sold),col="green")
+abline(h=quantile(data$Sold)[2]- 1.5*iqr,col="purple")
+abline(h=quantile(data$Sold)[4]+ 1.5*iqr,col="purple")
+abline(h=quantile(data$Sold)[1],col="orange")
+```
+
+Note there were no outliers in this data, even the 3.150 million dollar purchase!
+
+Also note the lower threshold is not shown...why?
+
+## Reporting 
+
+- Like the median, the IQR is **robust**, so it's suitable as a summary of spread for skewed data.
+- We report in pairs: (mean,SD) or (median,IQR).
+
+
+## Coefficient of Variation
+
+- The **Coefficient of Variation (CV)** combines the mean and standard deviation into one summary: 
+
+$$ \mbox{CV} = \frac{\mbox{SD}}{\mbox{mean}}$$
+- It is the standard deviation relative to the mean (which measures the relative spread)
+- The CV is used in:
+    - analytical chemistry to express the precision and repeatability of an [assay](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2556577/);
+    -  engineering and physics for [quality assurance studies](https://books.google.com.au/books?id=Gi5HDgAAQBAJ&pg=PA89&lpg=PA89&dq=quality+assuraNCE+ENGINEERING+CV+COEFFICIENT&source=bl&ots=51yNwiaf0d&sig=YGIveZ8Mo1lWotFnYXj6_UEsUDw&hl=en&sa=X&ved=0ahUKEwi-76SUrMzZAhWBPZQKHcDfCH4Q6AEIUTAL#v=onepage&q=quality%20assuraNCE%20ENGINEERING%20CV%20COEFFICIENT&f=false);
+    - economics for determining the [volatility of a security](https://www.investopedia.com/ask/answers/031715/what-can-coefficient-variation-cov-tell-investors-about-investments-volatility.asp).
+    
+
+
+
+
+<!-- # Population vs Sample (Ext) -->
+
+<!-- ##  -->
+
+<!-- ```{r, out.width = '85%', echo=F, warning = F} -->
+<!-- library("DiagrammeR") -->
+
+<!-- DiagrammeR::grViz("  -->
+<!-- digraph rmarkdown { -->
+
+<!-- graph [fontsize = 16, fontname = Arial, nodesep = .1, ranksep = .8] -->
+<!-- node [fontsize = 16, fontname = Arial, fontcolor = White] -->
+<!-- edge [fontsize = 12, fontname = Arial, width = 2] -->
+
+<!-- Population [shape=box,style=filled, color=SteelBlue4,width=2.5, label='Population standard deviation'] -->
+
+<!-- Sample [shape=oval, style=filled, color=SteelBlue3, label='Sample standard deviation'] -->
+
+<!-- Population -> Sample [label = ''] -->
+<!-- } -->
+<!-- ") -->
+<!-- detach(package:DiagrammeR) -->
+<!-- ``` -->
+
+
+<!-- ## Estimation Theory  -->
+
+<!-- - Applying the **population** standard deviation formula to the **sample**, **underestimates** the **true** population standard deviation. -->
+<!-- - Hence, we need an adjusted formula for the sample standard deviation where we divide by $\frac{1}{n-1}$ rather then $\frac{1}{n}$. -->
+<!-- - This will be covered in 2nd year courses on estimation theory. -->
+<!-- - Here, we simply illustrate by example. -->
+
+<!-- ## Example -->
+
+<!-- Suppose we want to know the average property price in Newtown between April-June 2017. -->
+<!-- (Note: The use of the Simulation-code is very extension!) -->
+
+<!-- ## -->
+
+<!-- ### Use the full data (assume it's a population). -->
+<!-- ```{r} -->
+<!-- # all properties -->
+<!-- n = length(data$Sold) -->
+<!-- mean(data$Sold)   # this is the true mean -->
+<!-- sd(data$Sold)*sqrt((n-1)/n)  # this is the true population sd -->
+<!-- ``` -->
+
+
+<!-- ## -->
+
+<!-- ### Simulation: Simulate 1000 samples of size 10, and average the results. -->
+
+<!-- ```{r, warning = F} -->
+<!-- set.seed(1)   # Ensures we run same simulation each time -->
+<!-- means=rep(NA,1000)   # Empty vectors for the "for" loop -->
+<!-- sdpop=rep(NA,1000) -->
+<!-- sdsample=rep(NA,1000) -->
+<!-- for (i in 1:1000)  # Simulate the samples 50 times -->
+<!-- { -->
+<!-- sample =sample(data$Sold,10)   # Select a sample of 10 readings -->
+<!-- means[i]=mean(sample)  # Calculate the mean of sample, and store in means -->
+<!-- sdpop[i]=sd(sample)*sqrt(9/10) # Calculate the population sd of sample, and store in sdpop -->
+<!-- sdsample[i]=sd(sample)  # Calculate the sample sd of sample, and store in sdsample -->
+<!-- } -->
+<!-- mean(means)  # average of means -->
+<!-- mean(sdpop)  # average of population sds -->
+<!-- mean(sdsample)   # average of sample sds -->
+<!-- ``` -->
+
+<!-- ## Summary of results -->
+
+<!-- |Data|Size|Mean|Population SD formula|(Adjusted) Sample SD formula| -->
+<!-- |----------|-------|---------|----------------|----------| -->
+<!-- |Full population|56|1407.143 (true)|**593.7166 (true)**|| -->
+<!-- |Average of simulations|10|1407.204|560.5123|**590.8318**| -->
+
+<!-- <br> -->
+<!-- Notice for the simulations, that the sample SD is closer to the true population SD. -->
+
+
+
+
+
+## Summary
+The spread of data is commonly measured by the standard deviation or the interquartile range.
+
+We need to distinguish between population and sample to work out the correct standard deviation.
+
+|Type of data|Formula|In R|
+|-------|--------|-----|-----|
+|**Population** standard deviation|$\sqrt{ \frac{1}{n} \sum_{i=1}^{n} (gaps)^2}$|`popsd(data)`|
+|**Sample** standard deviation|$\sqrt{ \frac{1}{n-1} \sum_{i=1}^{n} (gaps)^2}$|`sd(data)`|
+
+##
+
+### Key Words
+root mean square (RMS), standard deviation, variance, standard units, interquartile range (IQR), quantile, quartile, robust, coefficient of variation (CV)
+
+### Key R Functions
+`sd`, `popsd`, `IQR`, `summary`
+
+### Further Thinking
+
+<i class="fa fa-link"></i>
+[Numerical Summaries](http://www.alcula.com/calculators/statistics/dispersion/)

@@ -1,0 +1,753 @@
+---
+title: "MathsGuide (Extension)"
+author: "Formulisation behind DATA1001 ENVX1002 MATH1005/1015/1905/1115"
+params:
+  soln: TRUE
+  supp: FALSE
+  show: 'hide'
+output:
+  html_document:
+    fig_caption: yes
+    include:
+      after_body: css/stylesDD.js
+    number_sections: yes
+    self_contained: yes
+    theme: flatly
+    css:
+      - css/styles.css
+      - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+  pdf_document:
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,tidy=TRUE)
+show_q = TRUE
+show_s = FALSE
+```
+
+<br><br><br>
+
+<div class="aimbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Preparation
+- This is a self-study extension guide.
+- It allows you to preview the mathematical formulisation that lies behind the statistical concepts you are learning, which will be formally introduced in 2nd year courses.
+</div>
+
+<br>
+
+# Module1: Exploring Data
+
+## Population and sample
+
+- Behind all statistical theory lies the distinction between a population and sample.
+- The distinction is very easy to define, but surprisingly easy to confuse in practise.
+- We most commonly have access to the sample, not the population, unless we have a census.
+- With the right statistical thought, we can use a sample to make infereneces (judgements) about the population.
+- Both the population and sample can be called 'data', but most commonly 'data' refers to the sample, as the population is unknown.
+
+|Aspect|Population|Sample|
+|----------|----------------------|-----------------|
+|Definition|All information being studied|Subset of the population|
+|Size|$N$|$n$|
+|Observations|$\{ X_{1}, X_{2}, \ldots, X_{N}\}$|$\{ x_{1}, x_{2}, \ldots, x_{n}\}$|
+|Characteristic|Parameter|Statistic|
+|Mean|$\mu$|$\bar{x}$
+|Standard deviation (SD)|$\sigma$|$s$|
+|Variance|$\sigma^2$|$s^2$|
+|Random Variable|$X \sim (\mu,\sigma^2)$||
+
+Note: In DATA1001 et al, we use "SD" for the standard deviation.
+
+## Moments
+- The moments are special characteristics of a population, including:
+
+|Name|Symbol for population|
+|------|-----------------------|
+|Mean|$\mu$|
+|Median|$M$
+|Variance|$\sigma^2$|
+|Skewness|$\gamma$|
+
+- Often the population is unknown, and so we can estimate the population parameters from the sample statistics. 
+
+|Name|Population parameter|Estimated by sample statistic|
+|------|-----------------------|-----------------|
+|Mean|$\mu= \frac{1}{N}\sum_{i=1}^{n} X_{i}$|$\bar{x}= \frac{1}{n} \sum_{i=1}^{n} x_{i}$|
+|Variance|$\sigma^2 = \frac{1}{N}\sum_{i=1}^{n} (X_{i}-\mu)^2$|$s^2=\frac{1}{n-1}\sum_{i=1}^{n} (x_{i}-\bar{x})^2$
+
+- The population mean is estimated by the sample mean.
+- Similarly, the population variance is estimated by the sample variance, but with a slight change. Note the denominator is $n-1$. Why? Briefly, this is because the formula for the sample standard deviation uses $\bar{x}$ which itself is an estimate. Hence, we now have only $n-1$ indepdendent sample points, and the "degrees of freedom" has reduced by 1. 
+- In 2nd year, you will see that $s^2$ is an unbiased estimator for $\sigma^2$:
+
+\[ \sigma^2 = \frac{1}{N^n} \sum_{z_{i},\ldots,z_{n}} \frac{1}{n-1} \sum_{i=1}^{n} (z_{i}-\bar{z})^2 \]
+where the outside summation is over all possible $N^n$ possible samples $z_{1},\ldots,z_{n}$ taken with replacement from the population $X_{1},\ldots, X_{N}$.
+
+- The question remains, how good are these estimates? This leads us to a discussion of chance error (Module3).
+- The box model is a conceptual framework for understanding chance error for simple random samples.
+
+## Note on standard deviation (SD) in R
+
+Sample:
+
+-  Base `R` is programmed to calculate the sample standard devation with `sd()`.
+
+```{r,eval=F}
+sd(data)
+```
+
+Population:
+
+- To calculate the population standard devation, we can use 4 methods:
+
+1. The quickest way is to use a library!
+
+```{r,eval=F,warning=F, message=F}
+library(multicon)
+popsd()
+```
+
+2. For a 0-1 box, there is a short cut.
+
+```{r,eval=F}
+(max(box) - min(box)) * sqrt(length(box[box == max(box)]) * length(box[box == min(box)])/N^2)
+```
+
+3. We can work out the population RMS directly.
+
+```{r,eval=F}
+sqrt(mean((box-mean(box)^2)))
+```
+
+4. We can adjust the sample SD by $\sqrt{\frac{N-1}{N}}$
+
+```{r,eval=F}
+N=length(box)
+sd(data)*sqrt((N-1)/N)
+```
+
+## Formula for quartiles
+Given the ordered sample $x_{(1)}, x_{(2)}, \ldots, x_{(n)}$:
+
+- the median (2nd quartile) is
+
+\[ \tilde{x} = x_{(\frac{n+1}{2})}  \mbox{where n is odd} \]
+
+\[ \tilde{x} = \frac{ x_{(\frac{n}{2})} + x_{(\frac{n}{2} + 1)} }{2}  \mbox{where n is odd} \]
+
+- There are many different conventions for defining the quartiles.
+
+## Effect of scaling & shifting on moments
+
+Given a sample $x_{1}, x_{2}, \ldots, x_{n}$, or $\{ x_{i} \}$ for $i=1,2,\ldots n$. Create new data $\{ y_{i} \}$ for $i=1,2,\ldots n$.
+
+- Shift by a constant $a$: $y_{i} = a + x_{i}$.
+
+\[  \bar{y} = \frac{1}{n} \sum_{i=1}^{n} y_{i}
+= \frac{1}{n} \sum_{i=1}^{n} (a+x_{i}) = a + \bar{x} \]
+
+\[ \tilde{y} = a + \tilde{x} \]
+
+\[  s_{y} = s_{x} \]
+
+- Scale by a constant $b$: $y_{i} = b x_{i}$.
+
+\[  \bar{y} = \frac{1}{n} \sum_{i=1}^{n} y_{i} = b \bar{x} \]
+
+\[ \tilde{y} = b \tilde{x} \]
+
+\[  s_{y} = bs_{x} \]
+
+- Linear function: $y_{i} = a + b x_{i}$.
+
+\[  \bar{y} = \frac{1}{n} \sum_{i=1}^{n} y_{i}
+ = a + b \bar{x} \]
+
+\[ \tilde{y} = a + b \tilde{x} \]
+
+\[  s_{y} = bs_{x} \]
+
+## Relationship between population RMS & standard deviation (SD)
+
+Given a population $X_{1}, X_{2}, \ldots, X_{N}$:
+
+- The population RMS is
+
+\[  RMS = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} X_{i}^2 } = \sqrt{ \bar{ X_{i}^2 } } \]
+
+- The population standard deviation is:
+
+\[  \sigma = RMS(X_{i}-\bar{X}) = \sqrt{ \frac{1}{n}  \sum_{i=1}^{n} (X_{i}-\bar{X})^2 }  \]
+
+We can also show  algebraically that
+\[  \sigma = \sqrt{ \frac{1}{n} [ \sum_{i=1}^{n} X_{i}^2  - (\frac{1}{n} \sum_{i=1}^{n} X_{i})^2 ] }
+= \sqrt{ \frac{1}{n} [\sum_{i=1}^{n} X_{i}^2  -n \bar{X}^2 } ] \]
+
+
+## Simpson's Paradox
+
+Simpson's Paradox follows from a property of unreduced fractions.
+
+- Divide subjects by a Group: count the number with a certain characteristic.
+
+|Group|Number with the characteristic|Overall Number in the Group|
+|---|---|---|
+Group1| $a_1$ + $a_2$| $b_1$ + $b_2$ |
+Group2| $c_1$ + $c_2$ | $d_1$ + $d_2$ |
+||||
+
+- Divide subjects by a SubGroup: count the number with a certain characteristic.
+
+|Group|SubGroup|Characteristic|Overall|
+|---|---|---|---|
+|Group1|SubGroup1|$a_1$|$b_1$|
+|Group1|SubGroup2|$a_2$|$b_2$|
+|Group2|SubGroup1|$c_1$|$d_1$|
+|Group2|SubGroup2|$c_2$|$d_2$|
+|||||
+
+- Even if
+$$ \frac{a_1}{b_1} < \frac{c_1}{d_1} $$
+and $$ \frac{c_1}{d_1} < \frac{c_2}{d_2} $$
+
+it is possible to have 
+
+$$ \frac{a_1+ a_2}{b_1 +b_2} > \frac{c_1+c_2}{d_1 +d_2}. $$
+
+<i class="fa fa-link"></i>
+[Aitken](http://onlinelibrary.wiley.com/store/10.1111/1467-9868.00124/asset/1467-9868.00124.pdf;jsessionid=9DBD1575E37FB398F9B70920ADBCB2E1.f02t04?v=1&t=j2sh2tju&s=bf5a892d294aa16c3045827c2824a1bc36192c88)
+<i class="fa fa-link"></i>
+[Pyschological Science](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3740239/)
+
+For other interesting statistical paradoxes, see <i class="fa fa-link"></i> [UTS](https://www.youtube.com/watch?v=Z1L4mFhUOs4&feature=youtu.be).
+
+## The grammar of graphics
+- `ggplot` is based conceptually on the "grammar of graphics" which seeks to concisely describe the components
+of a graphic by using the deep structure that underlies statistical graphics.
+- See interesting articles:
+<i class="fa fa-link"></i> [Hadley Wickham](http://vita.had.co.nz/papers/layered-grammar.pdf) [Liz Sander](https://codewords.recurse.com/issues/six/telling-stories-with-data-using-the-grammar-of-graphics)
+
+<br>
+<br>
+
+# Module2: Modelling Data
+
+## Models
+- We use the shape of the sample to predict the shape of the population.
+- By distribution, we mean the values and probabilities associated with the model for the population.
+- Each model has a set of parameters, which is the information required to specify and use the distribution.
+
+## The Normal Distribution
+
+- The Normal distribution has lots of interesting properties.
+    - It has 2 very special parameters: the mean $\mu$ and standard deviation $\sigma$.
+    - It has points of inflection at $\mu \pm \sigma$. 
+-  The probability density function (pdf) is:
+\[ f(x)  =  \frac{1}{  \sqrt{2 \pi \sigma^2}}  e^{   -\frac{ (x-\mu)^2 }{2 \sigma^2  } }
+\;\;\;\;\; \mbox{for }  x \in (- \infty, \infty) \]
+
+- The cumulative distribution function (CDF) is
+\[ F(x) = P(X \leq x) = \int_{-\infty}^{x} f(y) dy \]
+
+## Other Continuous Distributions
+
+- There are so many [interesting distributions](https://en.wikipedia.org/wiki/List_of_probability_distributions).
+- The following 3 continuous distributions are commonly used in Hypothesis Testing (introduced in Module4).
+
+|Distribution|Examples of Tests|
+|-----|--------------|
+|Student $t$|t-tests|
+|Fisher's $F$|Test for equal variance, and ANOVA in 2nd year courses|
+|Chi-Squared $\chi^{2}$|Goodness of Fit Test, homogeneity and independence|
+
+### Student t
+
+The Student t distribution is symmetric and bell-shaped with thicker tails than a Normal. We say the variable $X \sim t_{n}$, with $n$ degrees of freedom.
+
+The pdf is:
+\[ f(x)  =  \frac{ \Gamma(\frac{n+1}{2})}  { \sqrt{n \pi} \Gamma(\frac{n}{2})}
+(1+ \frac{x^2}{n})^{-\frac{n+1}{2}}
+\;\;\;\;\; \mbox{for }  x \in (- \infty, \infty) \]
+
+The mean is 0 and variance is $\frac{n}{n-2}$ for $n > 2$.
+
+```{r, echo=FALSE, fig.height = 5}
+curve(dnorm(x), xlim = c(-3, 3),ylab="", col="black", main="Comparing Student t to Normals")
+curve(dt(x,1), xlim = c(-3, 3),add=TRUE, col="blue")
+curve(dt(x,2),xlim = c(-3, 3), add=TRUE,lty=1,col="red")
+curve(dt(x,30),xlim = c(-3, 3), add=TRUE,lty=1,col="green")
+#legend(2,0.4,legend=c("N(0, 1)","t_1","t_2", "t_30"),col=c("black", blue","red","green"))
+legend("topright",legend=c("N(0, 1)","t1","t2","t30"),lty=1,col=c("black","blue","red","green"))
+```
+ 
+$P(X \leq 2)$, where $X \sim t_{4}$.
+
+```{r}
+pt(2,4)
+``` 
+ 
+### Chi-Squared distribution
+
+The Chi-Squared distribution is the sum of squared independent Standard Normal random variables. It can only take positive values and is typically right skewed.
+
+We say the variable $X \sim \chi^2_{n}$, with $n$ degrees of freedom.
+
+The pdf is:
+\[ f(x)  =  \frac{ 1}  { 2^{\frac{n}{2}} \Gamma(\frac{n}{2})}
+x^{\frac{n}{2}-1} e^{-\frac{x}{2}}
+\;\;\;\;\; \mbox{for }  x \in (0, \infty) \]
+
+The mean is $n$ and variance is $2 n$.
+
+```{r echo=FALSE, fig.height = 4}
+curve(dchisq(x,1), xlim = c(0, 50),ylab="", col="black")
+curve(dchisq(x,2), xlim = c(0, 50),add=TRUE, col="blue")
+curve(dchisq(x,3),xlim = c(0, 50), add=TRUE,lty=2,col="red")
+curve(dchisq(x,30),xlim = c(0, 50), add=TRUE,lty=3,col="green")
+legend("topright",legend=c("Chi1","Chi2","Chi3","Chi30"),lty=1:4,col=c("black","blue","red","green"))
+```
+
+$P(X \geq 3)$, where $X \sim \chi^2_{4}$.
+
+```{r}
+1-pchisq(3,4)
+```
+
+### Fisher's F
+
+The Fisher's F distribution is the scaled ratio of 2 $\chi^2$ variables, with $m$ and $n$ degrees of freedom.
+
+We say the variable $X \sim F_{m,n}$. 
+
+The pdf is:
+\[ f(x)  =  \frac{ \Gamma( \frac{m+n}{2} ) m^{\frac{m}{2}}  n^{\frac{n}{2}}   }{ \Gamma( \frac{m}{2} )  \Gamma( \frac{n}{2} )}
+\frac{ x^{\frac{m}{2}-1}  }{ (n + mx)^{\frac{m+n}{2}}      }
+\;\;\;\;\; \mbox{for }  x \in (0, \infty) \]
+
+The mean is $\frac{n}{n-2}$ for $n >2$ and variance is $\frac{2 n^2 (m+n-2)}{m (n-2)^2(n-4)}$ for $n > 4$.
+
+```{r echo=FALSE, fig.height = 5}
+curve(df(x,1,1), xlim = c(0, 50),ylab="", col="black")
+curve(df(x,2,2), xlim = c(0, 50),add=TRUE, col="blue")
+curve(df(x,3,2),xlim = c(0, 50), add=TRUE,lty=2,col="red")
+curve(df(x,30,30),xlim = c(0, 50), add=TRUE,lty=3,col="green")
+legend("topright",legend=c("F1","F2","F3","F30"),lty=1:4,col=c("black","blue","red","green"))
+```
+
+$P(1 < X \leq 3)$, where $X \sim F(2,4)$.
+
+```{r}
+pf(3,2,4)-pf(1,2,4)
+```
+
+## The Linear Regression Model
+
+Suppose we have a bivariate sample $\{ x_{i}, y_{i} \}$, for $i=1,2,\ldots,n$ from a population $\{ X,Y \}$. 
+
+### Numerical summaries
+
+Numerical summaries include:
+
+|Name|Formula|
+|---------------|-----------------------|
+|Mean of x|$\bar{x}$|
+|Mean of y|$\bar{y}$|
+|Point of averages|($\bar{x}$,$\bar{y}$)|
+|Standard deviation of x|$s_x = \sqrt{ \frac{1}{n-1}\sum_{i=1}^{n} (x_{i}-\bar{x})^2}$|
+|Standard deviation of y|$s_y = \sqrt{ \frac{1}{n-1}\sum_{i=1}^{n} (y_{i}-\bar{y})^2}$|
+|Pearson's correlation coefficient|$r = \frac{1}{n-1} \sum_{i=1}^{n} \frac{x_{i} - \bar{x}}{s_{x}} \frac{y_{i} - \bar{y}}{s_{y}} = \frac{cov(x,y)}{ s_{x} s_{y} }$|
+||$r = \frac{ S_{xy} }{\sqrt{ S_{xx} S_{yy}} }$|
+
+given the sample covariance:
+\[ cov(x,y) = \frac{1}{n-1} \sum_{i=1}^{n} x_{i} y_{i} - \bar{x} \bar{y} \]
+
+and the sums of squares:
+\[ S_{xx} = \sum_{i=1}^{n} x_{i}^2 - \frac{1}{n} (\sum_{i=1}^{n} x_{i})^2 = (n-1) s_{x}^2 \]
+\[ S_{yy} = \sum_{i=1}^{n} y_{i}^2 - \frac{1}{n} (\sum_{i=1}^{n} y_{i})^2 = (n-1) s_{y}^2 \]
+\[ S_{xy} = \sum_{i=1}^{n} x_{i} y_{i} - \frac{1}{n} (\sum_{i=1}^{n} x_{i}) (\sum_{i=1}^{n} y_{i}).  \]
+
+### 2 lines to fit data
+
+Two possible lines are considered here:
+
+|Line|Concept|Slope|Intercept|
+|-----------------|--------------------------|-------|-------------------|
+|SD line|Connects ($\bar{x}$,$\bar{y}$) to ($\bar{x} + s_{x}$,$\bar{y} + s_{y}$)|$\frac{s_{y}}{s_{x}}$|$\bar{y} - \frac{s_{y}}{s_{x}}\bar{x}$|
+|Least Squares regression line (LSL)|Minimises the residuals|$\frac { S_{xy} }{ S_{xx}}$|$\bar{y} - b \bar{x}$|
+
+### Residuals
+
+- Residuals are the "gaps" between the observed data and the predicted values:
+
+\[ e_{i} = \hat{y}_{i} -y_{i} \]
+
+- The smaller the residuals the better the fit of the line.
+
+- The RMS error is like a standard deviation for the line.
+
+\[ \mbox{RMS error} = \sqrt{\mbox{mean}(\mbox{gaps}^2)} = \sqrt{ \frac{ e_{1}^2 + e_{2}^2 + \ldots e_{n}^2}{n}} = \sqrt{1-r^2} s_{y} \]
+
+|Context|RMS error|
+|---------------------------|---------------|
+|Base line method = predict $\bar{y}$ for every $x_{i}$| $s_{y}$|
+|LSL|smallest possible RMS error|
+|All points on a line|0|
+|Random scatter of points or $r=0$|$s_{y}$|
+
+- The residual plot is $y_{i}$ vs $e_{i}$, and should be a random scatter of points if the line is appropriate fit.
+
+### Proof of LSL using least squares
+
+- We are interested in fitting a model $Y = f(X) + error$, where the error is independent of the function $f(X)$ and follows a Normal curve.
+
+- Examples include:
+$Y = \alpha + (X+\beta)^2 + \gamma + error$ (quadratic) or $Y=\alpha e^{\beta X}$ (exponential) or $Y=\alpha X^{\beta}$ (allometric).
+
+- We will just consider the linear model: $Y = \alpha + \beta X + error$. 
+
+- We use the sample values $\{ (x,y) \}$ to find an estimate of the model: $y = a + b x + residual$.
+
+- Note that both the exponential and allometric models can be expressed as a linear model by taking logs of each side.
+
+- We consider the "best" line, to have the smallest residuals, determined by their sum of squared residuals 
+\[ S(a,b)= \sum_{i=1}^{n} e(a,b)^2 = \sum_{i=1}^{n} (y - (a+bx))^2. \]
+
+- We minimise $S(a,b)$  by solving  $\frac{ \partial}{\partial a} = 0$ and 
+$\frac{ \partial}{\partial b} = 0$. This gives 
+ \[ \sum_{i=1}^{n} y_{i} - na - b \sum_{i=1}^{n} x_{i} = 0 \]
+and
+\[\sum_{i=1}^{n} x_{i} y_{i}  -  a \sum_{i=1}^{n} x_{i}   - b \sum_{i=1}^{n} x_{i}^2 = 0 \]
+
+- As long as the  $x_i$ are not all equal, there is a unique solution for the intercept and the slope, we get
+
+\[  \boxed{ a = \bar{y} - b \bar{x}   } \]
+and
+\[ \boxed{ b = \frac { S_{xy} }{ S_{xx}} } \]
+
+- Note that the natural numerical summaries for bivariate data are:
+$\bar{x}, \bar{y}, s_{x}, s_{y}$, so the least squares regresion line is a combination of all these summaries: $\hat{y} = a+bx$.
+
+### Relationship between Correlation Coefficient and Slope
+
+There is an interesting relationship between $r$ and $b$.
+
+\[ b =  \frac{ S_{xy} }{ S_{xx}  }
+= \frac{ S_{xy} }{\sqrt{ S_{xx} S_{yy}} }   \frac{ \sqrt{ S_{yy} } }{ \sqrt{ S_{xx} } }
+= r \frac{ \sqrt{ S_{yy}/(n-1)} }{ \sqrt{ S_{xx}/(n-1) }  }
+= r \frac{ s_{y}}{s_{x}} \]
+
+Hence:
+
+- The sign of $r$ reflects the trend (slope) of the data.
+- $r$ is unaffected by a change of scale or origin.
+- See other [correlation coefficients](https://en.wikipedia.org/wiki/Correlation_coefficient).
+
+### Predictions within a strip
+
+- If the vertical strips on the scatter plot show equal spread in the $y$ direction, then the data is **homoscedastic**.
+- If the data is homoscedastic, then we can use the Normal approximation within vertical strips.
+- We consider the $y$ values within the strip as a new data set $y^{*}$ with
+\[ \bar{y}^{*} = \bar{y} + r z_{x} \]
+\[  s_{y}^{*}  \approx RMS \]
+
+<br>
+<br>
+
+# Module3: Sampling data
+
+## Moments of Random Variables
+
+- Suppose a random experiment is described by a discrete random variable $X$, with probabilities $P(X=x)$ for all appropriate $x$.
+
+- The probability distribution function is 
+\[ \{ P(X=x), x \} \] 
+
+- The mean is
+\[ E(X) = \sum_{i=1}^{} x P(X=x) = \mu \]
+and
+\[ E(X^2) = \sum_{i=1}^{} x^2 P(X=x). \]
+
+- The variance is
+\[ Var(X) = \sum_{i=1}^{} (x-\mu) P(X=x) = E(X^2) - E^2(X) = \sigma^2 \]
+
+
+## Binomial Formula
+
+- Suppose we have $n$ independent, binary trials, with the probability of a success $p$ at every trial, and $n$ is fixed.
+- Let $X$ = the number of successes.
+- Then we say that $X \sim Bin(n,p)$, where
+
+$$ P(X=x) = {n \choose x} p^x (1-p)^{n-x} \mbox{ for } x=0,1,2,\ldots, n \;\; (*) $$
+Properties include:
+
+- $E(X) = np$
+- $Var(X) = np(1-p)$
+- These can be proved algebraically, by substituting (*) into the formulas for moments above.
+
+## Sum of random variables
+
+- Assume we have a population with mean $\mu$ and standard deviation $\sigma$.
+- Take a random sample of size $n$: $X_{1}, X_{2}, \ldots, X_{n}$, so $E(X_{i}) = \mu$ and $SD(X_{i}) = \sigma$.
+- Consider the **sample sum** $S = \sum_{i=1}^{n} X_{i}$, then
+\[ E(S) = E\left(\sum_{i=1}^{n} X_{i}\right) = 
+\sum_{i=1}^{n} E(X_{i}) = n \mu   \]
+\[ SD(S) = SD\left(\sum_{i=1}^{n} X_{i}\right) = 
+\sum_{i=1}^{n} SD(X_{i}) = n \sigma \]
+
+- Consider the **sample mean** $\overline{X} = \frac{1}{n} \sum_{i=1}^{n} X_{i}$, then
+\[ E(\overline{X}) = E\left(\frac{1}{n} \sum_{i=1}^{n} X_{i}\right) = \frac{1}{n} E\left(\sum_{i=1}^{n} X_{i}\right) = \frac{1}{n} n \mu = \mu   \]
+\[ Var(\overline{X}) = \frac{\sigma^2}{n} \]
+\[ SD(\overline{X}) = \frac{\sigma }{\sqrt{n}} \]
+
+Note how this connects with the box model below.
+
+## Box Model
+
+Motivation: If we draw a sample from a population (with replacement), what do we expect the **sample mean** and the **sample sum** to be? What is the chance error?
+
+- The box model is a way of conceptualising the expected value and chance error for a simple random sample with replacement.
+    - The box is a collection of $N$ "tickets" representing the **population**.
+    - The box has mean $\mu$ and standard deviation $\sigma$.
+    - The $n$ random (independent) draws from the box form the **sample**.
+- The box does not contain the whole population, rather the types of outcomes in the population in the right proportions. 
+    - For example, when we toss a fair dice 10 times, the number of even faces can be represented by a box with "1" (for even) and "0" (for odd). 
+    - Or, it could be represented by a box with 3x"1" (for even) and 3x"0" (for odd).
+- We are interested in 2 aspects of the sample:
+    - the **sum** of the sample.
+    - the **mean** (average) of the sample.
+- Special case: For a 0-1 box, this is the equivalent to:
+    - the **number (count) of preferences** for "1" in the sample.
+    - the **proportion of preferences** for "1" in the sample.
+
+    
+### Mean and standard deviation (SD) of the box (population)
+
+Suppose we have the contents of the box, for example 3x"1" and 3x"0".
+
+```{r,results='hide'}
+box=c(0,0,0,1,1,1,1)
+```
+
+- The mean of the box is just the average of the tickets.
+
+```{r,results='hide'}
+mean(box)
+```
+
+- The standard deviation (SD) of the box can be worked out in 4 ways.
+    
+```{r,results='hide',warning=F, message=F}
+##  quickest way!
+library(multicon)
+popsd(box)
+
+## RMS of population
+sqrt(mean((box-mean(box)^2)))
+## using R function for sample sd, with correction for population
+N=length(box)
+sd(box)*sqrt((N-1)/N)
+## Short-cut (Only for 0-1 box)
+(max(box) - min(box)) * sqrt(length(box[box == max(box)]) * length(box[box == min(box)])/N^2)
+```
+  
+### Sample Sum of Box Model: EV & SE
+
+For the **sum** of $n$ random draws from a box model with replacement,
+\[ \mbox{observed value (OV) = expected value (EV) + chance error} \]
+
+where the observed value (OV) comes from the data, ie the sample sum
+
+\[ \mbox{EV} =  n \mu \]
+
+and the chance error is estimated by a multiple of
+\[ \mbox{standard error (SE) =} \sqrt{n} \sigma \]
+
+
+### Sample Mean of Box Model: EV & SE
+
+For the **mean** of $n$ random draws from a box model with replacement,
+\[ \mbox{observed value (OV) = expected value (EV) + chance error} \]
+
+where the observed value (OV) comes from the data, ie the sample mean.
+
+\[ \mbox{EV} =  \mu \]
+
+and the chance error is estimated by a multiple of
+\[ \mbox{standard error (SE) =} \frac{\sigma}{\sqrt{n}}  \]
+
+### Applications of box model
+
+- Take a box model with population mean $\mu$ and SD $\sigma$.
+- Draw $n$ times with replacement, creating a sample of size $n$.
+
+|Context|Expected value (EV) |Standard Error (SE)|
+|------------------------------|-------------|-------------------|
+|**Sample Sum**|||
+|Sum of sample |$n \mu$ | $\sqrt{n} \sigma$|
+|Survey [0-1 box]: Number (count) of preferences for "1"|$n \mu$ | $\sqrt{n} \sigma$|
+|**Sample Mean**|||
+|Mean of sample |$\mu$ | $\frac{\sigma}{\sqrt{n}}$|
+|Survey [0-1 box]: Proportion of preferences for "1"| $\mu$ | $\frac{\sigma}{\sqrt{n}}$|
+|Survey: [by bootstrapping]|$\bar{x}$ | Work our SD/SE by assuming box has tickets in the same proportion as sample|
+|Survey [without replacement]||SE without replacement = $\frac{N-n}{N-1}$ × SE with replacement|
+|Error Box|Mean/EV=0||
+    
+### Central Limit Theorem
+
+Let $X_1,X_2,X_3,\ldots n$ be iid (independent and identically distributed) random variables with population mean $\mu$ and variance $\sigma^2 > 0$. Then as $n \leadsto \infty$
+
+\[ \bar{X}  \leadsto N(\mu, \frac{\sigma^2}{n}) \]
+
+<br>
+<br>
+
+# Module4: Decisions with data
+
+## Test Statistic
+To see how our data (observed value OV) fits with the null hypothesis, we calculate the test statistic which works out the "gap" between the 2.
+
+\[ \mbox{TS} = \frac{\mbox{observed value (OV)-expected value (EV)}}{\mbox{SE}} \]
+
+<br>
+
+## Summary of Tests
+
+|Test|Hypothesis|Assumptions|Test Statistic value|P-value|
+|--------------|------------------|----------|--------------|-----------|
+|Proportion Test|Ho: $p = p_{0}$. <br> <br> This is equivalent to a box with p % 1s and (1-p) % 0's. So the box has mean $p$ and SD $\sqrt{p(1-p)}$. <br> <br> Focusing on the sample sum, the EV = $np$ and the SE is $\sqrt{n p(1-p)}$ <br> <br> Focusing on the sample mean, the EV = $p$ and the SE is $\frac{\sqrt{p(1-p)}}{\sqrt{n}}$ <br><br> |$n$ independent, binary trials with same chance of success $p$.|$\frac{\mbox{number of 1's in sample}-np}{\sqrt{np(1-p)}}$ <br> <br>$\frac{\mbox{proportion of 1's in sample}-p}{\frac{\sqrt{p(1-p)}}{\sqrt{n}}}$|Tail(s) of Binomial distribution, or Normal approximation|
+|1-Sample Z-Test|Ho: $\mu=\mu_0$. <br> <br> This is equivalent to a box with the specified mean. So the box has mean $\mu_{0}$ and SD $\sigma$ (known). <br> <br> Focusing on the sample mean, the EV = $\mu_{0}$ and the SE is $\frac{\sigma}{\sqrt{n}}$. <br><br>|Random sample. Box is Normal, or we take a big enough sample to use the CLT. Known $\sigma$.|$\frac{\bar{x}-\mu_0}{\frac{\sigma}{\sqrt{n}}}$|Tail(s) of Z distribution|
+|1-Sample t-Test|Ho: $\mu=\mu_0$. <br><br>This is equivalent to a box with the specified mean. So the box has mean $\mu_{0}$ and unknown SD.<br><br>|Random sample. Box is Normal, or big enough sample to use CLT.|$\frac{\bar{x}-\mu_0}{\frac{s}{\sqrt{n}}}$|Tail(s) of $t_{n-1}$ distribution|
+|2-Sample t-Test (equal variance)|Ho: $\mu_{1}-\mu_2=0$. <br><br> 2 Boxes with the specified means and same variance. So the difference of means is 0$.|Random sample. Boxes are Normal, or big enough sample to use CLT. Equal variance.|$\frac{\bar{x}_1 - \bar{x}_2-0}{SE}$ <br> where $SE=\sqrt{\mbox{SD}_p^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)}$ <br> and $\mbox{SD}_p^2=\frac{(n_1-1)\mbox{SD}_1^2+\left(n_2-1\right)\mbox{SD}_2^2}{n_1+n_2-2}$ <br><br> |Tail(s) of $t_{n_1+n_2-2}$ distribution|
+|2-Sample t-Test (Welch)|Ho: $\mu_{1}-\mu_2=0$. <br><br> 2 Boxes with the specified means. So the difference of means is 0.|Random sample. Boxes are Normal, or big enough sample to use CLT.|$\frac{\bar{x}_1 - \bar{x}_2-0}{SE}$ <br> where $SE=\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$ <br><br> |Tail(s) of $t_{}$ distribution|
+|Chi-squared Test [Model]|Ho: Model fits qualitative data with $k$ categories. <br><br> Box has the specified model. <br><br> |No empty categories in model. No more than 20% of categories less than 5.|$\sum_{i=1}^n \frac{(O_{i}-E_i)^2}{E_i}$|Upper tail of $\chi^2_{k-1}$ distribution|
+|Chi-squared Test [Model]|Ho: 2 qualitative variables are independent. <br><br>Forms contingency table with $r$ rows and $c$ columns. <br><br> |No empty categories in model. No more than 20% of categories less than 5.|$\sum_{i=1}^n \frac{(O_{i}-E_i)^2}{E_i}$|Upper tail of $\chi^2_{(r-1)(c-1)}$ distribution|
+|Regression Test|H_0: $\beta_1=0$, where $\beta_1$ is slope of linear regresion line. [Or: There is not a linear trend.]|The residuals should be independent, normal, with constant variance (homoscedasicity).The relationship between the dependent and independent variable should look linear.|$\frac{\hat{\beta_1}- 0}{SE_{\beta_1}} = \frac{b}{SE_{\beta_1}}$||2 tails of $t_{n-2}$ distribution|
+
+<br>
+<br>
+
+## Tests in R
+
+
+|Test|Command|
+|--------------|------------------|
+|t-Test|`t.test()`|
+|Chi-squared Test|`chi.sq.test()`|
+
+<br>
+<br>
+<br>
+<br>
+
+# Appendix
+
+## Interesting related results
+
+### Mean and median minimise average squared distance and absolute distance to all data points
+
+Given a sample $x_{1} x_{2}, \ldots, x_{n}$, with mean $\bar{x}$ and median $\tilde{x}$, then for any constant $c$ we have
+
+\[ \frac{1}{n} \sum_{i=1}^{n} (x_{i}-\bar{x})^2  
+\leq \frac{1}{n} \sum_{i=1}^{n} (x_{i}-c)^2 
+\]
+
+\[ \sqrt{ \frac{1}{n} \sum_{i=1}^{n} |x_{i}-\tilde{x} |  }
+\leq \sqrt{ \frac{1}{n} \sum_{i=1}^{n} |x_{i}-c)|  }
+\]
+
+### Chebyshev Inequality
+
+- There are many interesting limiting results. One such is Chebyshev. which has many different spellings!
+- Let $X$ be a random variable with mean $\mu$ and standard deviation $\sigma >0$. Then for any real $k >0$,
+
+\[ P(|X-\mu| \geq k \sigma) \leq \frac{1}{k^2} \]
+
+### Identifying Outliers
+
+- Outliers are **unusual values** that do not fit the model. 
+- They can either indicate interesting values that need futher investigation or a transformation of the model, or they can indicate a possible mistake in your data.
+- There are 2 main ways to identify outliers:
+
+**The IQR method (Tukey)**
+
+We calculate the lower and upper thresholds
+\[ LT = Q_{1} - 1.5 IQR  \mbox{  and   }  UT = Q_{3} + 1.5 IQR  \]
+
+Any data point lying outside these thresholds is deemed an outlier.
+
+Disadvantages:  No outliers detected for $n \leq 4$ and for large samples wrongly identifies outliers.
+
+**The 3-$\sigma$ method** 
+
+Any data point lying more than 3 standard deviations away from the mean is deemed to be an outlier. 
+
+\[ x_{i} \mbox{ is an outlier iff } |x_{i} - \bar{x}| > 3 \sigma  \]
+
+Disadvantages:  No outliers detected for $n \leq 7$ and for large samples wrongly identifies outliers. 
+
+Note: 
+
+- The 3-sigma edit rule is popular in economics, but it should be avoided in practice due to the following inflexibility: The 3-$\sigma$ rule assumes that the underlying distribution is the Normal, and is based on both the sample mean and population standard deviation. 
+- Problems can occur when either:
+
+1. The data is sufficiently skewed. In this case, the mean is no longer a "good" measure of central tendency, and defining outliers as points outside of some symmetric neighbourhood of the mean is not appropriate. The risk is that the "outliers" are detected near the mode rather than the longer tail. Tukey's five number approach is less likely to suffer from this.  
+
+2. The underlying population has heavy tails. The principle behind the 3-$\sigma$ rule is that $P(  |x_{i} - \bar{x}| > 3 \sigma)$ occurs with small probability, for example when the population is Normal this probability is 0.0027. 
+
+```{r}
+2*(1-pnorm(3))
+```
+
+If there are heavy tails then this probability can be substantially larger. For example, the probability is 0.029 when the population is $t_{3}$, or 0.10 when the population is $t_{1}$. In the latter case 10\% of the observations will be deemed `outliers'!
+
+### Three types of probability
+
+**1.Subjective probability: based on belief** 
+
+- The probability of an event is based on the strength of one’s belief.
+- Example: If I toss a fair coin once, the probability of getting a head is 0.5.
+- We rely on subjective probability for everyday decisions. But it can be abused.
+- For example, on March 27 1977 a PanAm 747 jet and a KLM 747 jet collided on an airport runway in the Canary Islands killing 583 people.  Both jets had been scheduled for the Las Palmas Airport, but were diverted to Los Rodeos Airport (now called Tenerife) after  a group of militants set off a small bomb at the airport’s flower shop earlier that day.  The following statement was released:  "NEW YORK, Mon: Mr. Webster Todd, Chairman
+of the American National Transportation Safety Board
+said today statistics showed that the chances of two
+jumbo jets colliding on the ground were about 6 million
+to one." (AAP, quoted in West Australian, 1977). Australian statistician Terry Speed questioned the Chairman, with the following response: "Dear Professor Speed, In response to your aerogram of April 5, 1977, the
+Chairman’s statement concerning the chances of two
+jumbo jets colliding (6 million to one) has no statistical
+validity nor was it intended to be a rigorous or precise
+probability statement. The statement was made to
+emphasize the intuitive feeling that such an occurrence
+indeed has a very remote but not impossible chance of
+happening.
+Thank you for your interest in this regard."
+
+**2. Frequentist (or simulation) probability: based on data**
+
+- The probability of an event is the proportion of times that event would occur in a large number of repeated experiments (simulation).
+- In some ways, subjective probability is an informal version of frequentist probability, using one's own history and experience (`personal data') as the basis.
+- Example: Tossing a Fair Coin. The probability of tossing a fair head =  $P(H)$ = The long run proportion of heads if we toss a fair coin a large number of times.
+
+**3. Theoretical (or classical) probability: based on model**
+The probability of an event is based on a model of the context. 
+
+Two models for Coin Tossing: 
+
+1. Physics model: the side that the coin lands on is determined by a number of complicated factors such as which way up it started, the degree of spin, the speed and angle with which it left the thumb and how far it has to fall.
+\href{https://www.youtube.com/watch?v=AYnJv68T3MM}{\beamergotobutton{PercisDiaconisVideo1}} 
+\href{https://www.youtube.com/watch?v=Obg7JPd6cmw}{\beamergotobutton{PercisDiaconisVideo2}}
+
+2. Standard model: Tossing a fair coin results in a head and a tail half the time, in an unpredictable order (random).  This is the model used for decisions in sport (eg which team starts with the ball in AFL, or which team bats or bowls first in cricket).
+
+Note: In later Stats courses, you will also learn about Bayesian Probability.
+
+### Axioms of probability
+
+
+
+
+

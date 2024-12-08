@@ -1,0 +1,25 @@
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-chart-line fa-stack-1x fa-inverse"></i></span> Module2 Probability and Data Modelling 
+
+<div class="thinkingbox"> 
+
+### Probability 
+What are the basic properties of probability? 
+
+<div style="margin-top: -15px"></div>
+
+### Discrete Random Variables
+How to model the process of flipping a coin?
+
+<div style="margin-top: -15px"></div>
+
+### Continuous Random Variables and Normal Curve 
+What is the Normal Curve? And what does it have to do with the centre and spread of a sample?
+
+<div style="margin-top: -15px"></div>
+
+### Linear Model 
+How can we describe the relationship between two variables? 
+
+<div style="margin-top: -15px"></div>
+
+</div>

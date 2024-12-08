@@ -1,0 +1,117 @@
+---
+title: "Introduction"
+subtitle: "Critical thinking with data"
+author: "© University of Sydney MATH1062"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+params:  
+    show_vers2: TRUE
+    show_s: TRUE
+output:
+  ioslides_presentation:
+    css:
+    - css/ioslidesnew.css
+    - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: yes
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{=html}
+<style>
+.title-slide {
+  background-image: url("https://raw.githubusercontent.com/tcui001/tcui001.github.io/master/assets/img/smoking.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+body {
+text-align: justify}
+</style>
+```
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+library(knitr)
+```
+
+# Extra Example
+
+## Investigating Speed Limit 
+
+Speed Limit could be considered as a discrete, quantitative variable, but here it might be better to classify it as an (ordinal) qualitative variable. Why?
+
+```{r, dpi=50}
+
+data = read.csv("data/2020fatalities.csv", header=TRUE)
+SpeedLimit = data$Speed.Limit
+Dayweek = data$Dayweek
+Gender = data$Gender
+table(SpeedLimit)  
+```
+
+## 
+### Simple Bar Plot
+```{r}
+barplot(table(SpeedLimit))  
+```
+
+##
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> Statistical Thinking
+
+What is curious about this data? Why?
+
+- -9 indicates a missing value. Why speed category of <40 **and**  speed limits of 10,15,20,25,30? We could 'clean' the data.
+
+What was the most common speed at which a road fatality occurred? How might this affect public policy?
+
+- Notice how many fatalities happen at high speeds (100km/hr+).  
+
+- Can we directly deduce from that lives can be saved by introducing stricter speed limits?
+</div>
+
+
+## 
+### Clean data 
+```{r}
+#SpeedLimit = data$Speed.Limit
+SpeedLimit[SpeedLimit=="5"] = "<40"
+SpeedLimit[SpeedLimit=="10"] = "<40"
+SpeedLimit[SpeedLimit=="15"] = "<40"
+SpeedLimit[SpeedLimit=="20"] = "<40"
+SpeedLimit[SpeedLimit=="25"] = "<40"
+SpeedLimit[SpeedLimit=="30"] = "<40"
+SpeedLimit[SpeedLimit==-9] = NA
+
+SpeedLimit = factor(SpeedLimit, levels=c("<40","40", "50", "60", "70", "75", "80", "90","100","110","130"))
+```
+
+## 
+### New barplot of SpeedLimit
+
+```{r}
+barplot(table(SpeedLimit))  
+```
+
+
+##
+### Double Bar Plot
+```{r}
+#Gender = data$Gender
+data2 = table(Gender,SpeedLimit)
+barplot(data2[-c(1,4),], main="Fatalities by Speed Limit and Gender",
+  xlab="Speed Limit", col=c("lightblue","lightgreen"),
+ 	legend = rownames(data2[-c(1,4),]), beside=TRUE)
+```
+
+##
+<div class="thinkingbox"> 
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> Statistical Thinking
+
+Are there any interesting patterns?
+</div>
+
+

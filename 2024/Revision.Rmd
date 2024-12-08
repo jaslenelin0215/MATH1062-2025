@@ -1,0 +1,253 @@
+---
+title: "Revision Weeks 1 - 6"
+subtitle: ""
+author: "© University of Sydney MATH1062"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+params:  
+    show_vers2: TRUE
+    show_s: TRUE
+output:
+  ioslides_presentation:
+    css:
+    - css/ioslidesnew.css
+    - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: yes
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{=html}
+<style>
+.title-slide {
+  background-image: url("https://raw.githubusercontent.com/tcui001/tcui001.github.io/master/assets/img/casino.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+body {
+text-align: justify}
+</style>
+```
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+library(knitr)
+```
+
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-map-marker-alt fa-stack-1x fa-inverse"></i></span> 
+
+<div class="thinkingbox"> 
+### [Basic concepts](#3)
+### [Graphical summaries](#5)
+### [Numerical summaries](#9)
+### [Normal curve](#12) 
+### [Linear model](#14) 
+### [Chance](#17)
+</div>
+
+# Basic concepts
+
+## Lecture 1 (Week 1)
+
+### Causation and association
+
+- It is very difficult to establish causation
+
+- It is rather easy to establish association (that one thing is linked
+    to another).
+    -   Association may **suggest** causation.
+    -   But association does not **prove** causation.
+
+### Confounding
+
+- It occurs when the effect of one variable (X) on another variable (Y) is clouded by the influence of another variable (Z).
+
+- A confounding variable can lead to **Simpson's Paradox**: the association between a pair of variables (X,Y) reverses sign upon conditioning of a third variable Z, regardless of the value taken by Z.
+
+# Graphical summaries
+
+## Lectures 1 and 2 (Week 1)
+
+### Classification of variables 
+
+```{r, out.width = '90%', echo=F, warning = F}
+library("DiagrammeR")
+
+DiagrammeR::grViz(" 
+digraph rmarkdown {
+
+graph [fontsize = 16, fontname = Arial, nodesep = .1, ranksep = .6]
+node [fontsize = 16, fontname = Arial, fontcolor = White]
+edge [fontsize = 12, fontname = Arial, width = 2]
+
+Type [shape=rectangle,style=filled, color=SteelBlue4,width=5]
+
+Qualitative [shape=rectangle, style=filled, color=SteelBlue3, label='Qualitative or Categorical \\n (Categories) \\n R: Factor or Character']
+
+Quantitative [shape=rectangle, style=filled, color=SteelBlue3, label='Quantitative or Numerical \\n (Measurements) \\n R: Numeric ']
+
+Ordinal [shape=rectangle, style=filled, color=SteelBlue3, label='Ordinal \\n (ordered) ']
+
+Nominal [shape=rectangle, style=filled, color=SteelBlue3, label='Nominal \\n (non-ordered)']
+
+BinaryO [shape=rectangle, style=filled, color=SteelBlue3, label='Binary \\n (2 categories)']
+
+BinaryN [shape=rectangle, style=filled, color=SteelBlue3, label='Binary \\n (2 categories)']
+
+NonBinaryO [shape=rectangle, style=filled, color=SteelBlue3, label='\\n (3+ categories)']
+
+NonBinaryN [shape=rectangle, style=filled, color=SteelBlue3, label='\\n (3+ categories)']
+
+Discrete [shape=rectangle, style=filled, color=SteelBlue3, label='Discrete \\n R: Integer  (int)']
+
+Continuous [shape=rectangle, style=filled, color=SteelBlue3, label='Continuous \\n R: Double']
+
+Type -> Qualitative  [label = '']
+Type -> Quantitative [label = '']
+Qualitative -> Ordinal  [label = '', style='dotted']
+Qualitative -> Nominal  [label = '', style='dotted']
+Ordinal -> BinaryO  [label = '', style='dotted']
+Ordinal -> NonBinaryO  [label = '', style='dotted']
+Nominal -> BinaryN  [label = '', style='dotted']
+Nominal -> NonBinaryN  [label = '', style='dotted']
+Quantitative -> Continuous  [label = '', style='dotted']
+Quantitative -> Discrete  [label = '', style='dotted']
+
+}
+")
+detach(package:DiagrammeR)
+```
+
+## Lectures 1 and 2 (Week 1)
+
+### Barplots 
+- for qualitative variables
+
+### Histogram 
+- for quantitative variables
+- density scale vs. frequency scale
+- endpoint convention of class intervals
+- the height and area of each block of a (density-scale) histogram respectively represent the density and proportion of a class interval
+  
+## Lectures 1 and 2 (Week 1)
+
+### Scatter plot 
+- for a pair of quantitative variables, used in [linear models](#14)
+
+### Box plot 
+- for quantitative variables, constructed from the median and the quartile range, see [numerical summaries](#9)
+- can locate outliers on a box plot
+
+```{r, fig.height=2.5, fig.width=8,echo=F}
+par(mar=c(0, 0, 0, 0))
+boxplot(iris$Sepal.Width, horizontal = T, frame.plot = FALSE, xaxt='n', ann=FALSE)
+```
+
+
+# Numerical summaries
+
+## Center, Lecture 3 (Week 2)
+
+### Sample mean 
+- sample average
+
+### Sample median 
+- middle point of a set of data values based on ordering
+
+### Skewness 
+- can be determined by sample mean and sample median
+
+### Robustness 
+- the median is robust to outliers 
+
+## Spread, Lecture 4 (Week 3)
+
+### Standard deviation (SD)
+  - Sample standard deviation (divided by $n-1$) 
+  - Population standard deviation (divided by $n$)
+  - Standard unit (Z-score) $$standard\;units = \frac{data\;points - mean}{SD}$$
+
+### Quantiles 
+  - Interquatile range (IQR, the range of the middle 50% of data)
+  - Being able to relate median and IQR to a box plot
+
+# Normal curve 
+
+## Lecture 5 (Week 3)
+A simple model used for approximate the data distribution (using [mean](#10) and [SD](#11)) 
+
+### Applications
+- Understand how to calculate proportions of a population, e.g., $P[X \leq x_0]$ or $P[x_0 \leq X \leq x_1]$, using area under the normal curve 
+- Basic R commands for calculating these areas and the quantiles
+
+### Useful properties
+- Any general normal can be rescaled into the standard normal
+- Symmetry around the mean
+- The 68%-95%-99.7% rule (areas 1, 2, and 3 SDs out from the mean in both directions)
+
+# Linear model
+
+## Lecture 6 (Week 4) 
+
+### Scatter plot 
+- Being able to describe the association between a pair of quantitative variables based on a scatter plot 
+
+### Correlation coefficient ($r$)
+- Understand the definition (average of the products of Z scores)
+- Its value is always beween $-1$ and $1$
+- Being able to interpret linear association using the values of correlation coefficient (and vice versa)
+- Properties: it is symmetric and invariant to scaling and shift
+- Can be sensitive to outliers
+- Nonlinear association cannot be determined (thinking about the Anscombes Quartet)
+
+
+## Lecture 7 (Week 5)
+
+### Regression Line
+- Use five numerical summaries $\bar x, \bar y, SD_x, SD_y$ and $r$
+- The line connects $(\bar x, \bar y)$ and $(\bar x + SD_x, \bar y + r SD_y)$, also takes the form (`lm()`) $$y = Intercept + slope \times x$$
+- Coefficient of determination ($r^2$), which tells the proportion of the variation (compared to the baseline prediction) in the dependent variable that can be explained by the linear model 
+- Residual plot
+  - If the linear fit is appropriate for the data, it should show no pattern (random points around 0)
+  - By checking the patterns of the residuals, the residual plot is a diagnostic plot to check the appropriateness of a linear model
+  - Homogeneity of the spread (homoscedasticity or heteroscedasticity)
+  
+  
+# Chance 
+
+## Lecture 8 (Week 5) 
+
+### Addition and multiplication rule
+
+|What|When|Formula|Condition|
+|---|----|-------|-----|
+Addition Rule| P(At least 1 of 2 events occurs)| P(Event1) + P(Event2) - P(Both events occur) | always|
+|||    P(Event1) + P(Event2)|   if mutually exclusive  |
+Multiplication Rule| P(Both events occur)| P(Event1) x P($\mbox{Event2|Event1}$)| always|
+||| P(Event1) x P(Event2)| if independent |
+
+
+### Conditional probability P(Event 2 | Event 1)
+- the chance that a certain event (2) occurs, *given* another event (1) has occurred.
+
+### Application of these rules 
+- Being able to work out probability of a combination of events, e.g., Chevalier's gambling games
+
+
+## Lecture 9 (Week 6)
+
+
+
+### Factorial and combinations
+- Factorial counts the number of **ordered** arrangements and combination is **not** sensitive to ordering
+- Useful in counting the number of possible outcomes in ``classical'' probability
+
+### Chance simulation 
+- Counting and drawing trees 
+- Using R
+- Sample with and without replacement: with replacement implies independence
+
+### Go through the exercises (in-lecture ones, labs, quizes)!

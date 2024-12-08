@@ -1,0 +1,201 @@
+.alignleft {
+  float: left;
+}
+
+.alignright {
+	float: right;
+}
+
+article {
+  margin-top: 10px !important;
+}
+
+slides > slide {
+padding: 5px 40px; 
+}
+
+/* Quotes and Shout (for io2012, custom) */
+article q {
+  font-family: 'Crimson Text', sans-serif;
+  quotes: none !important;
+}
+
+q {
+  quotes: none !important;
+  display: block;
+  color: purple;
+  background-color: #FFFF00;
+  padding: 20px !important;
+  font-size: 30px !important;
+  line-height: 36px !important;
+  margin-left: 30px;
+  margin-top: 20px;
+  margin-right: 30px;
+}
+
+q::before {
+  content: '' !important;
+  position: absolute;
+  display: inline-block;
+  margin-left: -2.1em;
+  width: 2em;
+  text-align: right;
+  font-size: 90px;
+  color: silver;
+}
+
+q::after {
+  content: '' !important;
+  position: absolute;
+  margin-left: .1em;
+  font-size: 90px;
+  color: silver;
+}
+
+div.author {
+  text-align: right;
+  font-size: 24px;
+  margin-top: 20px;
+  margin-right: 150px;
+}
+
+div.author::before {
+  content: '—';
+}
+
+q.shout {
+  background-color: transparent;
+}
+
+q.shout:before {
+  content: '“';
+  margin-left: -2.1em;
+  margin-top: 0.2em;
+  width: 2em;
+  text-align: right;
+  font-size: 90px;
+  position: absolute;
+}
+
+q.shout:after {
+  content: '';
+  position: absolute;
+  margin-left: 0.1em;
+  margin-top: -2em;
+}
+
+slides > slide:not(.nobackground):after {
+  /*content: '';*/
+  background: white;
+  background-color:white;
+}
+
+/* Remove gradient background in ioslides */
+slides > slide.backdrop {
+  z-index: -10;
+  display: block !important;
+/*  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(85%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#ffffff, #ffffff 85%, #ffffff);
+  background: -moz-linear-gradient(#ffffff, #ffffff 85%, #ffffff);
+  background: -o-linear-gradient(#ffffff, #ffffff 85%, #ffffff);
+  background: linear-gradient(#ffffff, #ffffff 85%, #ffffff); */
+  background: white !important;
+  background-color: white !important;
+}
+
+
+.slide {
+  background:white !important;
+  background-color:white !important;
+}
+
+#2a7cdf and #4387fd */ 
+ul, li,td,p {
+  /*    color: black;  */
+        color: red; 
+}
+td, th {
+   font-size: 23px !important;
+    padding: 0.25em 0.5em !important; 
+  }
+div.code_block {
+    width: 980px;
+    height: 500px;
+    overflow: auto;
+    /*
+    overflow-x: auto;
+    overflow-y: auto;
+    */
+}
+
+
+.emphasized {
+    font-size: 2.0em;
+}
+
+a { 
+  color: none;
+  text-decoration: none;
+  border-bottom: 0px;
+}
+a:visited { color: #551a8b; }
+a:focus { outline: thin dotted; }
+
+/* Improve readability when focused and hovered in all browsers: people.opera.com/patrickl/experiments/keyboard/test */
+a:hover, a:active { outline: 0; }
+
+.exclaim .reveal .state-background {
+  background: black;
+} 
+
+
+ul,li,td,p {
+  color: black !important;
+}
+
+
+
+
+
+
+.segue.nobackground h1,h2,h3,h4,h5,h6,p {
+  color:rgb(18, 65, 108);
+}
+.segue.nobackground.current hgroup h1,h2,p,a {
+  color:rgb(18, 65, 108);
+}
+
+.segue.dark {
+  background-color:rgb(18, 65, 108);
+}
+
+
+/* Dark Blue Background for slides */
+slides > slide.dark {
+  background-color:rgb(18, 65, 108) !important;
+}
+slides > slide.dark hgroup h1, h2 {
+  color: white;
+}
+
+
+/* Dark Blue Headings */
+h1,h2,h3,h4,h5,h6{
+  color:rgb(18, 65, 108);
+}
+/*
+.segue {
+  background:rgb(18, 65, 108)  !important;
+}
+*/
+
+/* line 820, ../scss/default.scss 
+.segue hgroup {
+  position: absolute;
+  bottom: 225px;
+}
+*/
+
+slides > slide {
+  overflow: scroll;
+}

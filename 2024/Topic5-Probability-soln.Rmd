@@ -1,0 +1,212 @@
+---
+title: "Solution to Exercises"
+subtitle: "Sampling Data | Understanding Probability"
+author: "© University of Sydney MATH1062"
+date: '`r format(Sys.Date(), "%d %B %Y")`'
+output:
+  ioslides_presentation:
+    css:
+      - css/ioslidesnew.css
+      - https://use.fontawesome.com/releases/v5.0.6/css/all.css
+    self_contained: true
+    transition: 0.1
+    widescreen: yes
+    incremental: no
+    
+---
+<style>
+.column-left{
+  float: left;
+  width: 49%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 49%;
+  text-align: right;
+}
+body {
+text-align: justify}
+</style>
+
+<style>
+.title-slide {
+  background-image: url("https://raw.githubusercontent.com/tcui001/tcui001.github.io/master/assets/img/casino.jpg");
+  background-size: 100% 100%;
+  opacity: 0.1;
+}
+</style>
+
+```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(tidy = TRUE, cache = FALSE) 
+library(knitr)
+```
+
+## 
+<div class="thinkingbox"> 
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+A coin is tossed twice. If the coin lands heads on the 2nd toss, you win $1.
+
+- If the 1st coin is a head, what is the chance of winning $1? 
+- If the 1st coin is a tail, what is the chance of winning $1? 
+- Are the tosses independent? 
+- What is the chance of winning $1?
+
+<div style="margin-top: -30px"></div>
+
+</div>
+<br>
+
+1. Event HH out of {HH,HT}; P(2nd H| 1st H) = $\frac{1}{2}$.
+2. Event TH out of {TH,TT}; P(2nd H| 1st T) = $\frac{1}{2}$. 
+3. Yes. 
+4. $\frac{1}{2}$ regardless of the first event.
+
+
+
+## 
+<div class="thinkingbox"> 
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+A die is rolled twice. What is chance that:
+
+- both the 1st and 2nd rolls are 1s?
+- the 1st roll is a 1 or the 2nd roll is a 1?
+
+
+<div style="margin-top: -30px"></div>
+
+</div>
+<br>
+
+Two rolls are independent.
+
+1. P(1st roll is 1) $\times$ P(2nd roll is 1 | 1st roll is 1) = $\frac{1}{6} \times \frac{1}{6} = \frac{1}{36}$ 
+2. P(1st roll is 1) + P(2nd roll is 1) - P(1st roll is 1 and 2nd roll is 1) = $\frac{1}{6} + \frac{1}{6} - \frac{1}{36} = \frac{11}{36}$
+
+## 
+<div class="thinkingbox"> 
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+A standard deck of 52 playing cards, consisting of 13 cards of each suit (four suits). A deck of cards is shuffled.
+
+What is chance that:
+
+- both the top card and the bottom card are the ace of spades?
+- the top card is the ace of spades or the bottom card is the ace of spades?
+
+<div style="margin-top: -30px"></div>
+
+</div>
+<br>
+
+1. 0 as they are mutually exclusive.
+2. P(top card is the ace of spades) + P(bottom card is the ace of spades) - P(top card and the bottom card are the ace of spades) 
+= $\frac{1}{52} + \frac{1}{52} - 0 = \frac{2}{52} = \frac{1}{26}$
+
+## 
+
+<div class="thinkingbox">
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+Why did the Chevalier lose money? What is the chance of winning? 
+
+  - Game A: Roll a die 4 times. Win = at least 1 "ace". 
+  - Game B: Roll a pair of dice 24 times: Win = at least 1 "double-ace".
+  - Note: an "ace" means "1".
+
+<div style="margin-top: -30px"></div>
+
+</div>
+
+##
+
+|Game|1 roll| # rolls|P(no Win)|P(Win)|
+|-|---|-|---|---|
+|A|P(not Ace) = 5/6|4|P(no Aces) = (5/6)^4 |1-(5/6)^4 = 0.518|
+|B|P(not Double-Ace) = 35/36|24|P(no Double-Aces) = (35/36)^24|1-(35/36)^24=0.49|
+
+<br>
+
+- Not having an "ace" in each roll is independent, applying the multiplication rule to work out the chance of lossing.
+
+- Considering the **complement** event, makes each of the complements **mutually exclusive**, so the solution follows easily.
+
+- So it's slightly better to play Game A.
+
+## 
+
+<div class="thinkingbox"> 
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+A chain is formed from n independent links, with a probability of $\theta$ that any link fails under a specified load. What is the probability that the chain fails under the load?
+
+<div style="margin-top: -30px"></div>
+
+</div>
+
+<div style="margin-top: 30px"></div>
+
+- A link does not fail is mutually exclusive to a link fails, so 
+\[
+P(\text{a link does not fail}) = 1- \theta
+\]
+
+- A chain fails is is mutually exclusive to a chain does not fail, so
+\[
+P(\text{a chain fails}) = 1 - P(\text{a chain does not fail}) = 1 - P(\text{all $n$ links do not fail})
+\]
+
+- $P(\text{all $n$ links do not fail}) = (1-\theta)^n$
+
+- $P(\text{a chain fails}) = 1 - (1-\theta)^n$.
+
+##
+
+<div class="thinkingbox"> 
+
+<div style="margin-top: -10px"></div>
+
+### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fas fa-pencil-alt fa-stack-1x fa-inverse"></i></span> Example
+
+<div style="margin-top: 10px"></div>
+
+The probability that a component lasts at least $x$ hours is $e^{−x/100}$ , for $x > 0$. What is the probability that the component lasts at least 10 hours, given it has already lasted at least 6 hours?
+
+<div style="margin-top: -30px"></div>
+
+</div>
+
+<div style="margin-top: 30px"></div>
+
+We denote the event of a component lasting at least $x$ hours by $T \geq x$. This way, the probability we are looking at is the conditional probability
+\[
+P(T \geq 10 | T \geq 6) = \frac{P(T \geq 6 \cap T \geq 10)}{P(T \geq 6)} = \frac{P(T \geq 10)}{P(T \geq 6)} = e^{-4/100}
+\]

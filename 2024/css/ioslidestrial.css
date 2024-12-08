@@ -1,0 +1,19 @@
+/* Title slide */
+
+/* Set the title slide background as an image 
+    Comment this out if you do not wish to have an image as background */
+.title-slide {
+  background-image: url("figures/title_image.jpg");
+  background-size: 100% 100%;
+}
+
+/* These two blocks set the title slide font colours
+They seem to work if either is there, don't seem to need both.
+*/
+.segue.nobackground h1,h2,h3,h4,h5,h6,p {
+  color:rgb(18, 65, 108);
+}
+.segue.nobackground.current hgroup h1,h2,p,a {
+  color:rgb(18, 65, 108);
+}
+

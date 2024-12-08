@@ -1,0 +1,17 @@
+## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-balance-scale fa-stack-1x fa-inverse"></i></span> Module4 Decisions with Data  
+
+<div class="thinkingbox"> 
+
+### The z-test
+How can we make evidence based decisions? Is an observed result due to chance or something else? How can we test whether a population has a certain proportion?
+
+### The t-test
+How can we test whether an unkown population has a certain mean?
+
+### The two-sample test
+How can we test whether two variables have the same mean? 
+
+### $\chi^2$-test
+How to compare frequencies of categories?
+
+</div>

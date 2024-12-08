@@ -1,0 +1,410 @@
+/* Slide setup
+article = independent, self-contained content
+slide = 
+!important = overrides all other subsequent styles ?
+*/
+
+/* This allows content longer than page to be scrolled */
+slides > slide {
+  overflow: scroll;
+}
+
+/* ????? */
+article {
+  margin-top: 10px !important;
+}
+
+/* Sets the slide padding (reduces from the default) */
+slides > slide {
+ padding: 50px; 60px;
+}
+
+/*   Removes slide gradient at bottom */
+slides > slide.backdrop {
+  background: white;
+}
+
+
+/* General Slides */
+
+/* Sets the slide background colour */
+.slide {
+  background:white !important;
+  background-color:white !important;
+}
+
+/* Dark Slides */
+
+/* Sets the dark slides background colour & font colour */
+slides > slide.dark {
+  background-color:rgb(18, 65, 108) !important;
+}
+slides > slide.dark hgroup h1, h2 {
+  color: white;
+}
+
+/* General Styles 
+ul = bullet points
+li = lists
+td = a standard cell in table
+p = paragraph
+h = headings
+*/
+
+/* Table styles         NEW*/
+
+td, th {
+   font-size: 23px !important;
+    padding: 0.25em 0.5em !important; 
+  }
+
+/* Bullet point styles     Jesenia*/
+
+ul { 
+list-style-type: disc;
+}
+
+
+/* Text Alignment  */
+
+.alignleft {
+  float: left;
+}
+.alignright {
+	float: right;
+}
+
+/* Keyword Styles */
+
+.kwd {
+  font-weight: bold;
+  color: 	rgb(18, 65, 108);
+/*  color: 	#5E9DC8; */
+}
+
+/* Line Styles */
+
+.line{
+  font-size: 1.1em;
+  font-weight: bold;
+  color: red;
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+/* In-line Code Style */
+
+code, tt {
+   font-size: 0.9em;
+   margin: 0 2px;
+   padding: 0 5px;
+   white-space: nowrap;
+   border: 3px solid #eaeaea;
+   background-color: #f8f8f8;
+   border-radius: 3px; }
+
+/* Code Block Style */
+
+div.code_block {
+    width: 980px;
+    height: 500px;
+    overflow: auto;
+    /*
+    overflow-x: auto;
+    overflow-y: auto;
+    */
+}
+
+/* Link Styles */
+
+a { 
+  /*color: black;*/
+  color: rgb(18, 65, 108);
+  text-decoration: underline;
+  border-bottom: 0;
+}
+/*a:visited { color: #551a8b; } */
+a:visited { color: rgb(18, 65, 108); }
+a:focus { outline: thin dotted; }
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+/* Improve readability when focused and hovered in all browsers: people.opera.com/patrickl/experiments/keyboard/test */
+a:hover, a:active { outline: 0; }
+
+
+/* Box Styles */
+
+/*Starting Off box */
+.startbox 
+{
+    padding: 20px;
+    border: 5px solid grey;
+    background-color: green;
+    font-size: 1.5em; 
+    font: white;
+}
+
+/*Statistical Thinking box */
+.thinkingbox 
+{
+    padding: 20px;
+    border: 5px solid grey;
+    background: white;
+}
+
+/*Definition box */
+.definebox 
+{
+    padding: 20px;
+    border: 5px solid grey;
+    background: white; 
+}
+
+/*Summary box */
+.summarybox 
+{
+    padding: 20px;
+    border: 5px solid grey;
+    background: white; 
+}
+
+/* Nicer Table Style Di */
+table,
+.table-condensed,
+table.rmdtable {
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+table,
+.table-condensed,
+table.rmdtable,
+table.rmdtable .header th,
+.table > thead > tr > th {
+  border-collapse: collapse;
+  border-style: solid;
+  border-spacing: 0;
+  border-width: medium 0 medium 0;
+  border-color: inherit
+}
+table.rmdtable th,
+table.rmdtable td,
+table th,
+table.rmdtable tr > td:first-child,
+table.rmdtable .even {
+  font-size: 100%;
+  padding: 0.4em 0.5em;
+  color: inherit;
+  background: #FFF;
+  font-weight: normal;
+}
+.table > tbody > tr > td {
+  border-width: 0;
+}
+
+/* reduces colour in code chunks Di  */
+.prettyprint,
+pre {
+    max-width: 100%;
+    left: 0;
+    display: block;
+    padding: 9.5px;
+    font-size: 13px;
+    line-height: 1.42857;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: #333333;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+
+
+/*** font ***/
+/* all */
+slides > slide.title-slide h1,
+slides > slide.title-slide h2,
+slides > slide.title-slide h3,
+slides > slide.title-slide h4,
+#myinfo {
+    text-transform: none;
+    font-family: arial, helvetica, sans-serif;
+}
+
+/* title page: main heading  */
+slides > slide.title-slide hgroup h1 {
+    font-size: 44pt;
+    font-weight: bold;
+    color: white;
+}
+
+/* title page: subtitle */
+slides > slide.title-slide h2 {
+    font-size: 28pt;
+    font-style: bold;
+    color: white
+}
+/* title page: date */
+slides > slide.title-slide h3 {
+    font-size: 18pt;
+    font-style: bold;
+    color: white;
+}
+/* title page: date */
+slides > slide.title-slide p {
+    font-size: 18pt;
+    font-style: bold;
+    color: white;
+}
+
+/* main title, subtitle and date to side 
+slides > slide.title-slide hgroup {
+    text-align: left;
+}
+*/
+
+/* organization info */
+#myinfo {
+    align: left;
+    font-size: 16pt;
+}
+
+
+/* Steel Blue headings as default throughout */
+h1,h2,h3,h4,h5,h6 {
+  color: rgb(18, 65, 108); 
+}
+
+h2 {
+  color: IndianRed; 
+}
+
+/* Black text as default throughout */
+ul,li,td,p {
+  color: black;  
+  /*   This line was removed so that title page colour of date/author could be changed!  
+  !important        */
+}
+
+/* change all fonts: nicer? Di  */
+slides > slide h1,
+slides > slide h2,
+slides > slide h3,
+slides > slide h4,
+slides > slide h5,
+slides > slide h6,
+slides > slide p,
+slides > slide ul,
+slides > slide ol,
+slides > slide td,
+slides > slide li {
+    text-transform: none;
+    font-family: arial, helvetica, sans-serif;
+    /* color: #FFFFFF; */
+
+
+
+
+/* Extra Customising Options
+
+/* Set the title slide background as an image 
+Comment this out if you do not wish to have an image as background.
+We have added this to separate css file so that it can be different for each lecture.
+.title-slide {
+  background-image: url("figure_title/face.jpg");
+  background-size: 100% 100%;
+}
+*/
+
+/*** This is a nicer logo: white background Di ***/
+/* .mylogo {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+.mylogo #mylogo-title {
+    all: inherit;
+    width: 148px;
+    height: 148px;
+    align: left;
+    margin-top: 180px;
+}
+*/
+
+/* Di: These lines don't seem to be needed
+Sam: These two blocks set the title slide font colours
+They seem to work if either is there, don't seem to need both.
+
+.segue.nobackground h1,h2,h3,h4,h5,h6,p {
+  color:rgb(18, 65, 108);
+}
+
+.segue.nobackground h1,h2,h3,h4,h5,h6,p,a {
+  color: yellow;
+}
+
+.segue.nobackground.current hgroup h1,h2,p,a {
+  color:rgb(18, 65, 108);
+}
+*/
+
+/*
+.title-slide hgroup h1,h2,h3,h4,h5,h6,p {
+  font-weight: bold;
+  letter-spacing: 0;
+  color: white;
+}
+*/
+
+/* changes colour of inline code: nicer? Di  
+code {
+    color: #009DDC;
+}
+*/
+
+/* all slides - changes backdrop colour - too dark - Di 
+slide,
+.overview slides >slide,
+.with-notes.popup slide {
+    background: #2B2B2B radial-gradient(circle farthest-corner at center center, #555A5F 0%, #1C1E20 100%)repeat scroll 0% 0%;
+}
+*/
+
+/* overview and presenter mode 
+.overview,
+.with-notes.popup slide.backdrop {
+    background: #000000;
+}
+*/
+
+
+/*  Changes padding for Shiny Apps
+slides > slide {
+  width: 1000px;
+  height: 800px;
+  padding: 10px 20px;
+  left: 46%;
+  top: 45%;
+}
+
+iframe {
+  height: 900px;
+}
+*/
+
+
+/* An attempt at full image
+.fullslide img {
+  margin-top: -85px;
+  margin-left: -60px;
+}
+*/
