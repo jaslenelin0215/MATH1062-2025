@@ -22,3 +22,8 @@ include: to reuse content across documents. https://quarto.org/docs/authoring/in
 
 ## Key Points Discussed: Natasha will experiment converting Topics 0 & 1's rmd files to quarto flies using the templates. 
 ## Next Steps: A follow-up meeting is scheduled for Friday at 11:30 AM to discuss and check the progress.
+
+## Additional thoughts: In terms of the structure of the lecture notes/slides, I am thinking that we can begin with a
+## motivating example, perhaps using one of the data set to provide some context, and just show the solution without any explanation. Then dive into the theory/concept part, then wrap up the lecture 
+## by using things taught in that lecture to answer the example. In the lecture notes, there can be a section on additional examples, using the other data sets to 
+## provide more examples for students to work offline. 
