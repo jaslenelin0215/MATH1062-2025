@@ -18,3 +18,7 @@ We can explore how to use conditional content to toggle on and off certain secti
 include: to reuse content across documents. https://quarto.org/docs/authoring/includes.html
 
 # 09_12_2024 meeting 
+## Attendees: Natasha and Jaslene
+
+## Key Points Discussed: Natasha will experiment converting Topics 0 & 1's rmd files to quarto flies using the templates. 
+## Next Steps: A follow-up meeting is scheduled for Friday at 11:30 AM to discuss and check the progress.
