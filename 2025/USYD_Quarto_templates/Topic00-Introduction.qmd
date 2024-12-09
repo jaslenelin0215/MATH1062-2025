@@ -6,30 +6,25 @@ author:
     affiliations: The University of Sydney
 embed-resources: true # embed resources into single HTML file -- enable when ready to publish
 # NOTE: please check _quarto.yml file for more options
-format:
-  pdf:
-    toc: true
-    number-sections: true
-    colorlinks: true
+#format:
+#  pdf:
+#    toc: true
+#    number-sections: true
+#    colorlinks: true
 ---
 
-::: {.content-visible when-format="html"}
+:::: {.content-visible when-format="pdf"}
 ## What is a statistician?
 
-- A primary objective of the statistician is to answer a research question. Most of the time, the research question concerns with activities/behaviours/phenomena in a targeted **population**.
+-   A primary objective of the statistician is to answer a research question. Most of the time, the research question concerns with activities/behaviours/phenomena in a targeted **population**.
 
-<div style="margin-top: -10px">
-</div>
-
-- Measurements with respect to the population is always very difficult to obtain, so statisticians aim to answer the research question using a **sample**.
-
-- A majority of the statistics literature looks at how to ‘best’ infer population characteristics from a sample.
-
-
-
+::: {style="margin-top: -10px"}
 :::
 
+-   Measurements with respect to the population is always very difficult to obtain, so statisticians aim to answer the research question using a **sample**.
 
+-   A majority of the statistics literature looks at how to ‘best’ infer population characteristics from a sample.
+::::
 
 # About
 
