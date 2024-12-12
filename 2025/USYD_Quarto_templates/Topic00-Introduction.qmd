@@ -16,7 +16,7 @@ embed-resources: true # embed resources into single HTML file -- enable when rea
 
 \newpage
 
-# What is a statistician?
+## What is a statistician?
 
 -   A primary objective of the statistician is to answer a research question. Most of the time, the research question concerns with activities/behaviours/phenomena in a targeted **population**.
 
@@ -38,7 +38,7 @@ cm?
 ::::
 
 
-# Course overview
+## Course overview
 
 -   Fundamental statistical concepts.
 -   A number of useful statistical models.
@@ -49,7 +49,7 @@ cm?
     
 ![](images/img1.png){fig-align="center"}
 
-# Plan for lectures 1 -- 4
+## Plan for lectures 1 -- 4
 
 -   Critical thinking with data
 -   Initial data analysis
@@ -57,7 +57,7 @@ cm?
 -   Numerical summaries
 
 
-## Population and sample
+### Population and sample
 
 -   The target population comprises all relevant subjects of interest.
 
@@ -67,7 +67,7 @@ cm?
 ![](images/img2.png){fig-align="center"}
 \newpage
 
-# Population and sample
+## Population and sample
 
 -   A sample is a subset of the population.
 -   It should be representative of the target population (not
@@ -77,7 +77,7 @@ cm?
 
 ![](images/img2.png){fig-align="center"}
 
-# Sources of bias
+## Sources of bias
 
 Bias may be defined as any systematic error (ie. not occurring randomly)
 which results in incorrect conclusions about the target population. Some
@@ -90,7 +90,7 @@ types of bias include
 
 \newpage
 
-## Selection bias
+### Selection bias
 
 Selection bias refers to any systematic differences occurring in the way
 that subjects are selected for a study.
@@ -106,7 +106,7 @@ players.
 
 \newpage
 
-## Measurement bias
+### Measurement bias
 
 Measurement bias refers to systematic differences in the measurement of
 variables.
@@ -118,7 +118,7 @@ E.g. In a human body temperature study, an in-ear thermometer is
 consistently higher than that of an oral thermometer.
 :::
 
-## Response bias
+### Response bias
 
 -   Response bias can occur when the response rate to a survey is too
     low.
@@ -130,7 +130,7 @@ consistently higher than that of an oral thermometer.
 
 \newpage
 
-## Confounding
+### Confounding
 
 Confounding occurs when the effect of one variable (X) on another
 variable (Y) is clouded by the influence of another variable (Z).
@@ -144,7 +144,7 @@ Z: sunny and warm weather
 Confounders can be hard to find, and can mislead about a cause and effect relationship.
 :::
 
-# Study design
+## Study design
 
 There are two main types of study designs
 
@@ -163,7 +163,7 @@ control over the subjects by giving some kind of treatment.
 
 -   Data are observed and recorded based on responses from subjects.
 
-## Study design
+### Study design
 
 Conclusions of a study depends on the design. Roughly speaking:
 
@@ -192,7 +192,7 @@ Conclusions of a study depends on the design. Roughly speaking:
 
 \newpage
 
-## Example: does smoking cause liver cancer?
+### Example: does smoking cause liver cancer?
 
 A study finds that smokers tend to have higher rates of liver cancer.
 Does smoking cause liver cancer?
@@ -201,7 +201,7 @@ Does smoking cause liver cancer?
 
 \newpage
 
-# Association and causation
+## Association and causation
 
 It is rather easy to establish association (that one thing is linked to
 another).
@@ -220,7 +220,7 @@ cancer?
     alcohol consumption.
 -   Here alcohol consumption is a confounding factor.
 
-## Strategy for establishing causation
+### Strategy for establishing causation
 
 -   If a confounder is known, we can potentially add it as an additional
     variable. For example, if alcohol consumption is a potential
