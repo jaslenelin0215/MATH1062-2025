@@ -16,10 +16,10 @@ html-math-method: mathjax
 ```{r Lec1, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 library(knitr)
 opts_chunk$set(tidy = TRUE, cache = FALSE) 
-library(knitr)
 ```
 
-## <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-chart-bar fa-stack-1x fa-inverse"></i></span> Module 1 Exploring Data 
+:::: {.content-visible when-format="html"}
+## Module 1 Exploring Data 
 
 ### Data & Graphical Summaries 
 What type of data do we have & how can we visualise it?
@@ -29,36 +29,45 @@ What are the main features of the data?
 
 ## Outline
 
-<div class="thinkingbox"> 
-### [Initial data analysis](#8)
-### [Identifying variables](#12) 
-### [Graphical summaries](#18) 
+### [Initial data analysis](#4)
+### [Identifying variables](#5) 
+### [Graphical summaries](#6) 
 
-- [Barplot](#21) 
-- [Histogram](#30) 
-- [Other graphical summaries](#45)
+- [Barplot](#7) 
+- [Histogram](#8) 
+- [Other graphical summaries](#9)
 
-### [Logical operators](#53)
-### [A research question (next week)](#60) 
-### [Summary](#71)
+### [Logical operators](#10)
+### [A research question (next week)](#11) 
 
-</div>
+::::
 
-# Data story | What causes Australian road fatalities?
+\newpage
+
+# Data story 
+What causes Australian road fatalities?
+
+:::: {.content-visible when-format="html"}
 
 ##
+
+::::
 
 We are going to investigate <i class="fa fa-link"></i>
 [data from the Australian Bureau of Statistics (ABS)](https://data.gov.au/dataset/ds-dga-5b530fb8-526e-4fbf-b0f6-aa24e84e4277) (last updated Nov 2023)
 
-<div align="center">
-<img src="figure/RoadFatalityDataViz2.jpg" width="60%" height="70%">
-</div>
+![](figure/RoadFatalityDataViz2.jpg){fig-align="center"}
 
 <i class="fa fa-link"></i>
 [ABC Animation](http://www.abc.net.au/news/2018-01-25/every-road-death-in-australia-since-1989/9353794)
 
-##
+:::: {.content-visible when-format="pdf"}
+
+\newpage
+
+::::
+
+## Variables
     
 ```{r, dpi=120}
 # Read in data
@@ -69,21 +78,21 @@ names(data)
     
 <i class="fa fa-link"></i> [Data dictionary](https://data.gov.au/data/dataset/5b530fb8-526e-4fbf-b0f6-aa24e84e4277/resource/59055fed-d4f1-4a81-b3ee-75cb438009c6/download/ardd_dictionary.pdf)
 
-##
-<div class="thinkingbox"> 
-### <span class="fa-stack fa"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-comment-alt fa-stack-1x fa-inverse"></i></span> Statistical Thinking
+## Statistical Thinking
 
-<div style="margin-top: 15px">
-</div>
-
-Possible questions:
+Possible research questions:
 
 - How many road fatalities have there been so far this year, and how does it compare to last year?
 - What is the most common day and time for a crash?
 - Does gender affect the type of road fatality?
 - What is the chance that a motorcycle rider is involved in a road fatality? 
 - How many people [wear seatbelts](https://infrastructure.gov.au/roads/safety/publications/1980/pdf/Belt_Analysis_1.pdf)?
-</div>
+
+:::: {.content-visible when-format="pdf"}
+
+\newpage
+
+::::
 
 # Initial data analysis
 
@@ -94,13 +103,10 @@ Data is **information** about the set of **subjects** being studied (like road f
 **Initial data analysis** is a first general look at the data, without formally answering the research questions.
 
 - IDA helps you to see whether the data can answer your research questions. 
-- IDA may pose other research questions.
+- IDA may lead to new research questions.
 - IDA can
     - identify the data's main qualities;  
     - suggest the population from which a sample derives.
-
-
-
 
 ## What's involved in IDA?
 
@@ -111,9 +117,9 @@ Initial Data Analysis commonly involves:
 - data wrangling: scraping, cleaning, tidying, 
 reshaping, splitting, combining
 - data summaries: graphical and numerical
-    
-<br>
+
 Here we focus on **structure** & **graphical summaries** for qualitative and quantitative data.
+
 
 # Structure of the data
 
@@ -150,13 +156,17 @@ How many variables does the road fatality data have?
 
 
 ```{r}
-# Size of Data
+# Size of Data (rows and columns)
 dim(data)
 ```
+
+:::: {.content-visible when-format="pdf"}
 
 ## Number of variables
 
 ![](images/img1.1.png){fig-align="center"}
+
+::::
 
 ## Types of variables 
 
@@ -169,47 +179,55 @@ Classify the variable `Age` in the Road Fatality Data.
 
 - Technically Age is a quantitative, continuous variable, but here the ages have been reported as discrete 'integer' (by rounding down to the nearest year). 
 
-- Age may be also be recorded as a qualitative variable in a survey, as respondents may be more willing to give their age category. However, it is optimal to record quantitative data if possible.
+- Age may be also be recorded as a qualitative variable in a survey, as respondents may be more willing to give their age category. (e.g. 18-24)
 
-Suggest a similar variable.
+- However, it is more precise to record quantitative data if possible.
+
+\newpage
 
 ## Change variable types in R
 
 ```{r, out.width = '90%'}
-# Structure of Data
+# Structure of Data (tells us how each variable is stored in R)
 str(data, vec.len=2)
 ```
 
-## 
+## Change variable types in R
 
 ```{r}
-# Change type of Variables
+# Change qualitative variables stored as "numeric" to "factors"
 data$Crash.ID=as.factor(data$Crash.ID)
 data$Month=as.factor(data$Month)
 ```
 
-```{r}
-# New structure of Data
-# display the first 5 variables using list.len 
-str(data, list.len=5, vec.len=2)
-```
+:::: {.content-visible when-format="pdf"}
+
+\newpage
+
+::::
 
 ```{r}
-# Change type of Variables
+# New structure of Data
+# Display the first 5 variables using list.len=5
+str(data, list.len=5)
+```
+
+```{r, warning = F}
+# Change quantitative variables stored as "characters" to "numeric"
 data$Speed.Limit=as.numeric(data$Speed.Limit)
 ```
 
 ```{r}
 # New structure of Data
-# display the first 5 variables using list.len 
-str(data[c(11,12,13,14,15)], vec.len=2)
+# Display variables 11 to 15
+str(data[c(11,12,13,14,15)])
 ```
 
 # Graphical summaries 
 
 ## Graphical summaries
 
-Once we identify the variables, we can summarise the data, both graphically and numerically, in order to identify and highlight the main features of interest. 
+Once we've identified the variables, we can summarise the data, both graphically and numerically, in order to identify and highlight the main features of interest. 
 
 We often start with graphical summaries because ‘A (well-designed) picture is worth a thousand words.’ 
 
@@ -227,7 +245,13 @@ How to choose an appropriate graphical summary?
 
 - However, it is important to understand how to construct graphical summaries ‘by hand’, so that you understand how to interpret computer output and for your final exam.
 
-# Graphical summaries | Barplot (qualitative data)
+# Graphical summaries
+
+:::: {.content-visible when-format="html"}
+
+Barplot (qualitative data)
+
+::::
 
 ## Barplot (qualitative data) 
 
@@ -235,7 +259,7 @@ How to choose an appropriate graphical summary?
 
 <div style="margin-top: -15px"></div>
 
-Step 1: build a frequency table
+Step 1: Build a frequency table
 
 <div style="margin-top: -15px"></div>
 
@@ -246,50 +270,46 @@ Dayweek = data$Dayweek
 table(Dayweek) 
 
 # Order days
-Dayweek=factor(Dayweek,levels= c("Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+Dayweek=factor(Dayweek,levels= c("Monday", "Tuesday","Wednesday", "Thursday", 
+                                 "Friday", "Saturday", "Sunday"))
 table(Dayweek) 
 ```
 
 ##
 
-Step 2: produce a barplot
+Step 2: Produce a barplot
+```{r, echo = F}
+mycols = c(rep("grey", 5), "orange", "grey")
+```
 
 ```{r, outwidth="120%", fig.width=10, fig.height=4.5}
 # Produce a barplot
-barplot(table(Dayweek))
+barplot(table(Dayweek), col = mycols, main = "Fatalities by Day of the Week", 
+        ylab = "Fatalities", xlab = "Day of the week")
 ```
 
 ## Statistical Thinking
 
 What was the most common day of road fatality? 
 
-<div style="margin-top: -15px"></div>
-
 - Saturday
-
-<div style="margin-top: 15px"></div>
 
 Why might that be the case?
 
-<div style="margin-top: -15px"></div>
-
 - More volume of cars on the road, or people driving faster?
-
-<div style="margin-top: 15px"></div>
 
 What data would you need to check your hypotheses?
 
-<div style="margin-top: -15px"></div>
-
 - Data on volume and speed of cars on the road each day.
+
+\newpage
 
 ## Double barplot
 
 Things get more interesting when we consider 2 qualitative variables.
 
 ```{r}
-# Select DayWeek and Gender variables
-Dayweek = data$Dayweek
+# Select Gender variable
 Gender = data$Gender
 
 # Produce a double frequency table (contingency table)
@@ -297,32 +317,36 @@ data1 = table(Gender, Dayweek)
 data1
 ```
 
-<br>
-
-<div style="margin-top: -35px"></div>
-
 Note: Here Gender refers to biological sex as it was historically recorded in this dataset. [Read more](https://www.abs.gov.au/ausstats/abs@.nsf/Lookup/by%20Subject/2071.0~2016~Main%20Features~Sex%20and%20Gender%20Diversity%20in%20the%202016%20Census~100).
 
+\newpage
+
 ## Stacked barplot
+
 ```{r, fig.width=10, fig.height=4.5}
 barplot(data1, main="Fatalities by Day of the Week and Gender",
-  xlab="Day of the week", col=c('red',"lightblue","lightgreen",'orange'),
+  xlab="Day of the week", ylab = "Fatalities", col=c('red',"lightblue","lightgreen",'orange', "purple", "pink"),
  	legend = rownames(data1))
 ```
 
+\newpage
+
 ## Side-by-side barplot
+
 ```{r}
 barplot(data1, main="Fatalities by Day of the Week and Gender",
-  xlab="Day of the week", col=c('red',"lightblue","lightgreen",'orange'),
+  xlab="Day of the week", ylab = "Fatalities", col=c('red',"lightblue","lightgreen",'orange', "purple", "pink"),
  	legend = rownames(data1), beside=TRUE)
 ```
 
+\newpage
 
 ## Side-by-side barplot ignoring '-9', 'M', 'U' and 'Unspecified'
 ```{r, fig.width=10, fig.height=4.5}
 barplot(data1[-c(1,3,5,6),], main="Fatalities by Day of the Week and Gender",
-  xlab="Day of the week", col=c("lightblue","lightgreen"),
- 	legend = rownames(data1[-c(1,3,5,6),]), beside=TRUE)
+  xlab="Day of the week", ylab = "Fatalities", col=c("lightblue","orange"),
+ 	legend = rownames(data1[-c(1,3,5,6),]), beside=TRUE,
+  args.legend = list(x = "topright"))
 ```
 
 ## Statistical Thinking
@@ -332,24 +356,32 @@ Are these plots telling us anything useful? How could they be misread?
 - There seems to be a similar proportion of gender fatalities across each day.
 - We could posit that men are more likely to be involved in fatal accidents than women. However, perhaps there are more men on the road than women. More data is needed.
 
-# Graphical summaries | Histogram (quantitative data)
+\newpage
 
+# Graphical summaries
 
+:::: {.content-visible when-format="html"}
+
+Histogram (quantitative data)
+
+::::
 
 ## Histogram 
 
 The frequency table can also be used to summarise a set of **quantitative** data, by collecting the data into **class intervals** (or ‘bins’). A histogram highlights the frequency of data in one class interval compared to another.
 
-This is the default histogram generated by R.
+This is the default histogram generated by R for Age of Road Fatalities .
 
 ```{r, echo=T, outwidth="90%", fig.width=6, fig.height=3.5}
 hist(data$Age, xlab="Age", ylab="Frequency",
      main="Histogram for Age of Road Fatalities")  
 ```
 
+\newpage
+
 ##
 
-We can also provide used-defined class intervals and the **density scale**.
+We can also provide user-defined class intervals and the **density scale**.
 
 **Q:** What were the most common age groups at which a road fatality occurred?
 
@@ -378,7 +410,9 @@ table(cut(Age,breaks,right=F))/length(Age)
 
 ::::
 
-## 
+\newpage
+
+## Histogram for Age of Road Fatalities in Australia 1989-2023
 
 ```{r, echo=T, outwidth="90%", fig.width=6, fig.height=3.5}
 hist(Age,br=breaks,right=F,freq=F,
@@ -405,7 +439,7 @@ Why does the 1st block start below 0?
 
 - It is better to replace the "-9" by "NA". 
 
-##
+## Removing Missing Values
 ```{r}
 # Replacing the "-9" entries
 data$Age[data$Age==-9] = NA   
@@ -431,7 +465,7 @@ How can we interpret this histogram?
 
 ## Details of density-scale histograms
 
-**1.**  We will mostly use the **density scale** instead of frequency scale. It has advantages for later modelling. 
+**1.**  We will mostly use the **density scale** instead of frequency scale. We will see why when looking at common mistakes.
 
 ### Density scale
 
@@ -441,13 +475,15 @@ $$\mbox{area (proportion) of each block} = \frac{ \mbox{number of subjects in th
 
 $$\mbox{height (density) of each block} = \frac{ \mbox{proportion of the block}}{\mbox{length of the class interval}} \hspace{36pt}$$
 
-##
+## Class Endpoints
 
 **2.** For continuous (quantitative) data, we need an **endpoint convention** for data points that fall on the border of two class intervals.
 
 - If an interval contains the left endpoint but excludes the right endpoint, then an 18 year old would be counted in [18,25) not [0,18).
 - We call this left-closed and right-open.
 - Similarly, we can also have left-open and right-closed, e.g., (18,25].
+
+\newpage
 
 ##
 
@@ -457,7 +493,7 @@ Think about how many class intervals (or the sizes of class intervals) you want 
 
 ```{r, fig.width=9, fig.height=3.5}
 par(mfrow=c(1,2))  # This puts the graphic output in 1 row with 2 columns
-breaks=seq(0,102,2)
+breaks=seq(0,102,2) # This sets the breaks to be every 2 numbers
 hist(Age,br=breaks,freq=F,right=F,
      xlab="Age", ylab='Density')
 breaks=c(0,18,25,70,101)
@@ -529,7 +565,7 @@ hist(AgeM,freq = F)
 <i class="fa fa-comment-alt"></i>
 Do you notice any differences between men and women?
 
-## Mistake 1: the block heights are equal to the percentages
+## Mistake 1: The block heights are equal to the percentages
 
 - Here we wrongly use the **percentage** (or the **total number** of subjects in a class interval) as the heights.
 - Unless the class intervals are the same size, in both cases this will makes larger class intervals look like a larger overall %. 
@@ -539,14 +575,14 @@ Do you notice any differences between men and women?
 breaks=c(0,18,25,70,101)  
 hist(Age,br=breaks,freq=T,right=F,
      xlab="Age (in years)", ylab="total numbers",
-     main="Histogram (with total numbers as height) for Age of Road Fatalities")  
+     main="Histogram for Age of Road Fatalities")  
 ```
 
 Solution: Use density as the height, especially if class intervals are **not** the same size. Don't use percentage or total numbers.
 
-## Mistake 2: Use too many or too few class intervals
+## Mistake 2: Using too many or too few class intervals
 
-This can hide the true pattern in the data. As a rule of thumb, use between 10-15 class intervals.
+This can hide the true pattern in the data. As a rule of thumb, use between 10-15 class intervals and make sure you consider the size of the data.
 
 ```{r, fig.height = 3, fig.width = 10}
 Age_reduced = Age[1:1000]  # only look at subset of data
@@ -575,10 +611,13 @@ There have been fatalities for nearly every combination... so it is hard to say 
 A heatmap might be a good choice here.
 A heatmap is especially useful when a contingency table is not practical due to too many different values.
 
+Heatmaps use colour to display the relative frequency for each value. In the graph below we can see darker colours for earlier years and for ages closer to 18 which suggests a higher frequency of fatalities around this points.
+
 <div style="margin-top: 15px"></div>
 
 ```{r, fig.height = 4}
-heatmap(table(Age, Year), Rowv=NA, Colv=NA, scale='none', main='Heatmap of frequencies')
+heatmap(table(Age, Year), Rowv=NA, Colv=NA, scale='none', 
+        main='Heatmap of frequencies')
 ```
 
 ## Boxplot 
@@ -597,11 +636,11 @@ summary(Age)
 <img src="figure/dacheng5.1.png" width="30%" height="30%">
 </div>
 
-##
+## Boxplot in R
 ```{r, outwidth="20%"}
 par(mfrow=c(1,2))
-boxplot(Age)
-boxplot(Age, horizontal=T)
+boxplot(Age) # We can plot the box plot vertically
+boxplot(Age, horizontal=T) # Or horizontally
 ```
 
 ## Statistical Thinking
@@ -617,18 +656,24 @@ A comparative boxplot splits up a quantitative variable by a qualitative variabl
 
 ```{r}
 Gender = data$Gender
-# Select each of the data entries in Age if the corresponding data entry in Gender is Female
+# Select each of the data entries in Age if the corresponding data entry 
+# in Gender is Female
 summary(Age[Gender=="Female"]) 
-# Select each of the data entries in Age if the corresponding data entry in Gender is Female
+# Select each of the data entries in Age if the corresponding data entry 
+# in Gender is Female
 summary(Age[Gender=="Male"])
 ```
 
 Here `Age` and `Gender` must have the same number of data points. 
 
-##
+## Comparing by Gender
 ```{r}
+# Filtering the gender variable to only include "female" and "male" values
 data$Gender = factor(data$Gender, levels= c("Female", "Male"))
+
+# Selecting the gender variable
 Gender = data$Gender
+
 boxplot(Age~Gender, horizontal = T)
 ```
 
@@ -684,6 +729,8 @@ x = 10
 is.numeric(x) & x < 0 # True and False
 ```
 
+\newpage
+
 ## 
 
 The evaluation of `|` (or): need to have at least one of the conditions to be `TRUE` to give a `TRUE` evaluation
@@ -720,6 +767,8 @@ x <= 0
 ```
 <div style="margin-top: 20px"></div>
 
+\newpage
+
 `TRUE` and `FALSE` in R also correspond to integers `1` (`TRUE`) and `0` (`FALSE`). This way, they are also useful for counting. For example, how many data points of $x$ in the following case are less than 5?
 
 <div style="margin-top: -5px"></div>
@@ -746,6 +795,8 @@ sleepers = data.frame(rating, animal, country, avg_sleep_hours)
 str(sleepers)
 ```
 
+\newpage
+
 ##
 
 Q1: Filter `sleepers` data with rating less than 3
@@ -763,6 +814,8 @@ sleepers2 = sleepers[sleepers$rating>3 & sleepers$avg_sleep_hours>15, ]
 dim(sleepers2)
 str(sleepers2)
 ```
+
+\newpage
 
 # Research question
 
@@ -786,17 +839,29 @@ names(data)
 - Find driving licence data with age information.
 - Combine information and derive a death rate per driving licence for different age groups.
 
+\newpage
 
-## 1) Only count those deaths where person is driver
+## 1) Only count those deaths where the person is the driver
+
+:::: {.content-visible when-format="html"}
 
 ### What is the definition of `Road.User`?
 
-<div align="center">
-<img src="figure/road_user.jpg" width="95%" height="95%">
-</div>
+::::
 
-## 1) Only count those deaths where person is driver
+:::: {.content-visible when-format="pdf"}
 
+What is the definition of `Road.User`?
+
+::::
+
+![](figure/road_user.jpg){fig-align="center"}
+
+:::: {.content-visible when-format="html"}
+
+## 1) Only count those deaths where the person is the driver
+
+::::
 
 ```{r, fig.height = 4, fig.width = 7}
 data.driver = data[data$Road.User=='Driver',]
@@ -805,9 +870,8 @@ breaks = c(0,18,25,70,101)
 # Produce a histogram
 hist(Age.driver,br=breaks,freq=F,right=F,
      xlab="Age (in years)", ylab="Density",
-     main="Histogram for Age of Road Fatalities of drivers in Australia 1989-2020")  
+     main="Age of Road Fatalities of drivers in Australia 1989-2020")  
 ```
-
 
 
 ## 2) Find driving licences data with ages
@@ -818,13 +882,13 @@ hist(Age.driver,br=breaks,freq=F,right=F,
 
 
 ```{r}
-### driver's licence data for SA Q4 2023
+# Driver's licence data for SA Q4 2023
 licence.sa = read.csv("data/drivers-licences-by-postcode-age-and-sex-q4-2023.csv", header=T)
 str(licence.sa)
 ```
 
-```{r}
-### Convert data type of Total to numeric
+```{r, warning = F}
+# Convert data type of Total to numeric
 licence.sa$Total = as.numeric(licence.sa$Total)
 ```
 
@@ -839,6 +903,8 @@ head(licence.sa)
 
 <div style="margin-top: 10px"></div>
 
+\newpage
+
 Pool the data for each age category using `aggregate`. 
 <div style="margin-top: 0px"></div>
 ```{r}
@@ -847,13 +913,20 @@ head(licence.sa.pooled)
 ```
 
 ## Plot the data with a barplot
+```{r, echo=F}
+options(scipen=999)
+```
+
 
 ```{r}
 Total = licence.sa.pooled$Total
-barplot(Total, names.arg=licence.sa.pooled$Age, ylab='# of drivers licences in 2023')
+barplot(Total, names.arg=licence.sa.pooled$Age, 
+        ylab='Number of drivers licences in 2023', ylim = c(0, 1000000))
 ```
 
-## Re-visit 1) 
+\newpage
+
+## Re-visit Step 1) 
 
 - We should filter the road deaths data for **South Australia** and for **drivers**.
 ```{r}
@@ -870,6 +943,8 @@ hist(data.sa$Age,br=breaks,freq=F,right=F,
      xlab="Age (in years)", ylab="Density",
      main="Histogram for Age of Road Fatalities of Drivers in SA")  
 ```
+
+\newpage
 
 ## 
 
@@ -901,37 +976,28 @@ death.rate = 10000 * data.sa.pooled/licence.sa.pooled$Total
 death.rate
 ```
 
-<div style="margin-top: 10px"></div>
-
 ### Conclusion: 
 Death rate per licence for age group [18,25) is the highest, approximately three times higher than the death rate for age group [25,70)
 
+:::: {.content-visible when-format="html"}
+
 ## Summary
 
-### [Identifying variables](#12) 
+### [Identifying variables](#5) 
 
-<div style="margin-top: -20px"></div>
+### [Graphical summaries](#7) 
 
-### [Graphical summaries](#18) 
-<div style="margin-top: -10px"></div>
+- [Barplot](#7) 
+- [Histogram](#8)
+- [Scatter plot](#9)
+- [Boxplot](#9) 
 
-- [Barplot](#21) 
-<div style="margin-top: -10px"></div>
-- [Histogram](#30)
-<div style="margin-top: -10px"></div>
-- [Scatter plot](#46)
-<div style="margin-top: -10px"></div>
-- [Boxplot](#48) 
-<div style="margin-top: -20px"></div>
-
-### [Logical operators](#53)
-
-<div style="margin-top: -20px"></div>
+### [Logical operators](#10)
 
 ### Some useful R Functions
 `names`, `dim`, `str`, `table`, `barplot`, `hist`, `plot`, `boxplot`, `as.factor`, `as.numeric`, `cut`, `sum`
 
-<div style="margin-top: -20px"></div>
-
 ### Logical operators
 `<`, `<=`, `>`, `>=`, `==`, `!=`, `&`, `|`, `!`
+
+::::
